@@ -8,11 +8,14 @@ SOURCES += main.cpp \
     ../tinyxml/tinystr.cpp \
     ../tinyxml/tinyxml.cpp \
     ../tinyxml/tinyxmlerror.cpp \
-    ../tinyxml/tinyxmlparser.cpp
+    ../tinyxml/tinyxmlparser.cpp \
+    map.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
     ../tinyxml/tinystr.h \
-    ../tinyxml/tinyxml.h
+    ../tinyxml/tinyxml.h \
+    ../tinyxml/map.h \
+    map.h
