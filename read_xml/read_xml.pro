@@ -18,4 +18,5 @@ HEADERS += \
     ../tinyxml/tinystr.h \
     ../tinyxml/tinyxml.h \
     ../tinyxml/map.h \
-    map.h
+    map.h \
+    gl_settings.h
