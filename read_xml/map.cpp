@@ -141,12 +141,14 @@ bool Options::GetDataFromXml(TiXmlHandle optionsHandle) {
 
 Map::Map() {
     this->map_description = "Untitled";
+//Algorithm and Options are independent entities. NOT part of map entity!
     this->algorithm = new Algorithm();
     this->options = new Options();
     this->startx = 0;
     this->starty = 0;
     this->finishx = 0;
     this->finishy = 0;
+//better - set default cellsize via constant devin in gl_settings
     this->cellsize = 1;
     this->height = 0;
     this->width = 0;
@@ -179,7 +181,7 @@ bool Map::GetMapFromXML(const char * fPath) {
     if(!mapHandle.ToElement()) return false;
 
     TiXmlElement* map_width = mapHandle.FirstChildElement( TAG_MAP_WIDTH ).ToElement();
-    if(!map_width) return false;
+    if(!map_width) return false;//Will user know what happened here? Why program stopped working? Any message to him?
     std::istringstream(map_width->GetText()) >> this->width;
 
     TiXmlElement* map_height = mapHandle.FirstChildElement( TAG_MAP_HEIGHT ).ToElement();
@@ -221,6 +223,7 @@ bool Map::GetMapFromXML(const char * fPath) {
 
         std::stringstream rowStream(rowAsXmlElement->GetText());
         for(int j = 0; j < this->width; j++){
+//Will it work with other separators except " "?
             rowStream >> this->grid[i][j];
         }
     }
@@ -274,10 +277,12 @@ void Map::DumpToXML(const char * fPath) {
     TiXmlElement* gridEl = new TiXmlElement( TAG_GRID );
     for (int i = 0; i < this->height; i++) {
         TiXmlElement* rowEl = new TiXmlElement( TAG_GRID_ROW );
+//"number" - bad. should be constant.
         rowEl->SetDoubleAttribute("number", i + 1);
 
         std::stringstream rowStream;
         for(int j = 0; j < this->width; j++) {
+//well " " also better be constant. May be we want another separator (like "_" or "-") the other day?
             rowStream << this->grid[i][j] << " ";
         }
         rowEl->LinkEndChild(new TiXmlText(rowStream.str()));
@@ -290,6 +295,7 @@ void Map::DumpToXML(const char * fPath) {
     TiXmlElement * algoContainer = this->algorithm->DumpToXmlElement();
     root->LinkEndChild(algoContainer);
 
+//"output", "density" - constants!
     TiXmlElement * outputContainer = new TiXmlElement("output");
     TiXmlElement * densityEl = new TiXmlElement("density");
     densityEl->LinkEndChild(new TiXmlText( toString(this->CalculateDensity()) ));
@@ -333,6 +339,8 @@ std::string toString(const Type& element) {
     return sstream.str();
 }
 
+//First business logic shall be agreed. Some tags can be missed (with default values set). Some - can not! So
+// there are two types of tag-handling: Error (program should terminate) and Warning - program should warn and continue.
 template <typename Type>
 void ReportTagMissing(const std::string & tag, const Type & default_value) {
     std::cerr << "[WARNING] Tag '" << tag << "' is missing; default value " << default_value << " set." << std::endl;
