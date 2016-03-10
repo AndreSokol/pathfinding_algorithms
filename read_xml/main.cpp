@@ -1,5 +1,4 @@
 #include "gl_settings.h"
-#include "map.cpp"
 
 int main(int argc, char *argv[])
 {
@@ -14,7 +13,13 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    //std::cout << new_map;
+    Analysis analysis;
+
+    analysis.AnalyzeMap(&new_map);
+
+    std::cout << analysis;
+
+    //std::cout << "Density: " << new_map.CalculateDensity() << std::endl;
 
     new_map.DumpToXML("out.xml");
 

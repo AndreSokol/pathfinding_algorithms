@@ -34,6 +34,23 @@
 #define TAG_OPTIONS_LOG_PATH      "logpath"
 #define TAG_OPTIONS_LOG_FILENAME  "logfilename"
 
+/*
+ * Some default values
+ */
+
+#define DEFAULT_CELLSIZE       1
+#define ELEMENT_OUT_OF_GRID   -1
+
+/*
+ * Output attributes and params
+ */
+
+#define TAG_OUTPUT_CONTAINER    "output"
+#define TAG_OUTPUT_DENSITY      "density"
+
+#define OUTPUT_LINE_NUMBER_ATTR "number"
+#define OUTPUT_MAP_SEPARATOR    " "
+
 #endif // GL_VARS
 
 #ifndef GL_LIBRARIES
@@ -54,6 +71,10 @@
 #ifndef PROJECT_FILES
 #define PROJECT_FILES
 
-#include "map.h"
+#include "utils.cpp"
+#include "algorithm.cpp"
+#include "options.cpp"
+#include "map.cpp"
+#include "analysis.cpp"
 
 #endif
