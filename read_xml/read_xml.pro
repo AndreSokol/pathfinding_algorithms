@@ -31,3 +31,6 @@ HEADERS += \
     map.h \
     analysis.h \
     obstacle.h
+
+DISTFILES += \
+    Logic/TagNecessity.txt

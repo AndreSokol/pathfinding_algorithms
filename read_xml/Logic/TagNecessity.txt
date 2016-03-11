@@ -1,0 +1,30 @@
+ ### HERE IS DESCRIPTION OF TAG NECESSITY AND DEFAULT VALUES ###
+
+<root>  - OBLIGATORY
+  <desc>   - default: "Untitled"
+
+  <map>    - OBLIGATORY
+    <width>    - OBLIGATORY
+    <height>   - OBLIGATORY
+    <cellsize> - default: set in defines by DEFAULT_CELLSIZE
+    <startx>   - default: "0"
+    <starty>   - default: "0"
+    <finishx>  - default: "0"
+    <finishy>  - default: "0"
+    <grid>     - OBLIGATORY
+      <row>       - OBLIGATORY
+
+  <algorithm>  - OBLIGATORY
+    <searchtype>    - default: "astar"
+    <metrictype>    - default: "euclid"
+    <hweight>       - default: "1"
+    <breakingties>  - default: "gmax"
+    <linecost>      - default: "1"
+    <diagonalcost>  - default: "1.414"
+    <allowdiagonal> - default: "0"
+    <allowsqueeze>  - default: "0"
+
+  <options>  - OBLIGATORY
+    <loglevel>    - default: "1"
+    <logpath>     - ???
+    <logfilename> - ???

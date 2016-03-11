@@ -29,8 +29,6 @@ int main(int argc, char *argv[])
 
     std::cout << analysis;
 
-    //std::cout << "Density: " << new_map.CalculateDensity() << std::endl;
-
     new_map.DumpToXML("out.xml");
 
     return 0;
