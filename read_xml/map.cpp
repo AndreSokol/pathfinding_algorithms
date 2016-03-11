@@ -29,24 +29,25 @@ Map::~Map () {
 bool Map::GetMapFromXML(const char * fPath) {
     TiXmlDocument doc;
     doc.LoadFile(fPath);
+    if( doc.Error() ) throw ParserError(doc.ErrorDesc(), fPath);
     TiXmlHandle docHandle( &doc );
 
     TiXmlHandle rootHandle = docHandle.FirstChild( TAG_ROOT );
-    if(!rootHandle.ToElement()) return false;
+    if(!rootHandle.ToElement()) throw MissingTagError( TAG_ROOT );
 
     TiXmlElement* mapDesc = rootHandle.FirstChild( TAG_DESC ).ToElement();
     if(!mapDesc) Utils::ReportTagMissing( TAG_DESC , this->map_description);
     else         this->map_description = mapDesc->GetText();
 
     TiXmlHandle mapHandle = rootHandle.FirstChild( TAG_MAP_CONTAINER );
-    if(!mapHandle.ToElement()) return false;
+    if(!mapHandle.ToElement()) throw MissingTagError( TAG_MAP_CONTAINER );
 
     TiXmlElement* map_width = mapHandle.FirstChildElement( TAG_MAP_WIDTH ).ToElement();
-    if(!map_width) return false;//Will user know what happened here? Why program stopped working? Any message to him?
+    if(!map_width) throw MissingTagError( TAG_MAP_WIDTH );
     std::istringstream(map_width->GetText()) >> this->width;
 
     TiXmlElement* map_height = mapHandle.FirstChildElement( TAG_MAP_HEIGHT ).ToElement();
-    if(!map_height) return false;
+    if(!map_height) throw MissingTagError( TAG_MAP_HEIGHT );
     std::istringstream(map_height->GetText()) >> this->height;
 
     TiXmlElement* map_cellsize = mapHandle.FirstChildElement( TAG_CELLSIZE ).ToElement();
@@ -70,7 +71,7 @@ bool Map::GetMapFromXML(const char * fPath) {
     else             std::istringstream(map_finishy->GetText()) >> this->finishy;
 
     TiXmlHandle gridHandle = mapHandle.FirstChild( TAG_GRID );
-    if(!gridHandle.ToElement()) return false;
+    if(!gridHandle.ToElement()) throw MissingTagError( TAG_GRID );
 
     this->grid = new int * [this->height];
     for(int i = 0; i < this->height; i++){
@@ -80,7 +81,10 @@ bool Map::GetMapFromXML(const char * fPath) {
     TiXmlElement* rowAsXmlElement;
     for(int i = 0; i < this->height; i++) {
         rowAsXmlElement = gridHandle.ChildElement( TAG_GRID_ROW, i).ToElement();
-        if(!rowAsXmlElement) return false;
+        if(!rowAsXmlElement) MissingTagError( TAG_GRID_ROW );
+        /*
+         * throw with line numbers, to be implemented
+         */
 
         std::stringstream rowStream(rowAsXmlElement->GetText());
         for(int j = 0; j < this->width; j++){
@@ -105,7 +109,7 @@ void Map::DumpToXML(const char * fPath) {
 
     TiXmlElement* mapDesc = new TiXmlElement( TAG_DESC );
     mapDesc->LinkEndChild(new TiXmlText(this->map_description));
-    mapContainer->LinkEndChild(mapDesc);
+    root->LinkEndChild(mapDesc);
 
     TiXmlElement* widthEl = new TiXmlElement( TAG_MAP_WIDTH );
     widthEl->LinkEndChild(new TiXmlText( Utils::toString(this->width) ));

@@ -71,6 +71,7 @@
 #ifndef PROJECT_FILES
 #define PROJECT_FILES
 
+#include "errors.cpp"
 #include "utils.cpp"
 #include "algorithm.cpp"
 #include "options.cpp"

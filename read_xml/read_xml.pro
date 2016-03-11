@@ -9,11 +9,13 @@ SOURCES += main.cpp \
     ../tinyxml/tinyxml.cpp \
     ../tinyxml/tinyxmlerror.cpp \
     ../tinyxml/tinyxmlparser.cpp \
+    errors.cpp \
     utils.cpp \
     algorithm.cpp \
     options.cpp \
     map.cpp \
-    analysis.cpp
+    analysis.cpp \
+    obstacle.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -22,9 +24,10 @@ HEADERS += \
     ../tinyxml/tinystr.h \
     ../tinyxml/tinyxml.h \
     ../tinyxml/map.h \
-    gl_settings.h \
     utils.h \
+    gl_settings.h \
     algorithm.h \
     options.h \
     map.h \
-    analysis.h
+    analysis.h \
+    obstacle.h

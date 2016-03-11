@@ -13,7 +13,7 @@ Algorithm::Algorithm (){
 }
 
 bool Algorithm::GetDataFromXml(TiXmlHandle algoHandle) {
-    if(!algoHandle.ToElement()) return false;
+    if(!algoHandle.ToElement()) throw MissingTagError( TAG_ALGO_CONTAINER );
 
     TiXmlElement * algoType = algoHandle.FirstChild( TAG_ALGO_TYPE ).ToElement();
     if(algoType) this->searchType = algoType->GetText();

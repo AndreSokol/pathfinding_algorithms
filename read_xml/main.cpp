@@ -8,9 +8,19 @@ int main(int argc, char *argv[])
     }
     Map new_map;
 
-    if(!new_map.GetMapFromXML(argv[1])) {
-        std::cerr << "Error: cannot read file" << std::endl;
-        return 0;
+    try {
+        new_map.GetMapFromXML(argv[1]);
+    }
+    catch (MissingTagError e) {
+        std::cerr << "[ERROR] Cannot find nessecary tag <" << e.tag() << ">! Exiting programm..." << std::endl;
+        return EXIT_FAILURE;
+    }
+    catch (ParserError e) {
+        std::cerr << "[ERROR] During reading file:" << std::endl
+                  << "[.....] " << e.path() << std::endl
+                  << "[.....] tinyXML parser caught following error: "
+                  << e.msg() << std::endl;
+        return EXIT_FAILURE;
     }
 
     Analysis analysis;
