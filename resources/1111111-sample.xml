@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
     <desc>This file contains task for plaining system (Pathfinding)</desc>
-    <map1>
+    <map>
         <width>25</width>
         <height>25</height>
         <cellsize>24</cellsize>
@@ -36,7 +36,7 @@
             <row number="24">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
             <row number="25">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
         </grid>
-    </map1>
+    </map>
     <algorithm>
         <searchtype>astar</searchtype>
         <metrictype>euclid</metrictype>

@@ -34,6 +34,8 @@
 #define TAG_OPTIONS_LOG_PATH      "logpath"
 #define TAG_OPTIONS_LOG_FILENAME  "logfilename"
 
+#define INPUT_GRID_SEPARATOR      ' '
+
 /*
  * Some default values
  */

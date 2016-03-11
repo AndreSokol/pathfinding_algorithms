@@ -90,6 +90,7 @@ bool Map::GetMapFromXML(const char * fPath) {
         for(int j = 0; j < this->width; j++){
 //Will it work with other separators except " "?
             rowStream >> this->grid[i][j];
+            rowStream.ignore(1, INPUT_GRID_SEPARATOR );
         }
     }
 
