@@ -11,11 +11,11 @@ SOURCES += main.cpp \
     ../tinyxml/tinyxmlparser.cpp \
     errors.cpp \
     utils.cpp \
+    obstacle.cpp \
     algorithm.cpp \
     options.cpp \
     map.cpp \
-    analysis.cpp \
-    obstacle.cpp
+    analysis.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -24,13 +24,13 @@ HEADERS += \
     ../tinyxml/tinystr.h \
     ../tinyxml/tinyxml.h \
     ../tinyxml/map.h \
-    utils.h \
     gl_settings.h \
+    utils.h \
+    obstacle.h \
     algorithm.h \
     options.h \
     map.h \
-    analysis.h \
-    obstacle.h
+    analysis.h
 
 DISTFILES += \
     Logic/TagNecessity.txt

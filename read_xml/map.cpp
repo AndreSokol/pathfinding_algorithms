@@ -1,7 +1,6 @@
 #include "map.h"
 #include "gl_settings.h"
 
-
 Map::Map() {
     this->map_description = "Untitled";
     this->algorithm = new Algorithm();
@@ -160,23 +159,12 @@ void Map::DumpToXML(const char * fPath) {
 
     TiXmlElement * outputContainer = new TiXmlElement( TAG_OUTPUT_CONTAINER );
     TiXmlElement * densityEl = new TiXmlElement( TAG_OUTPUT_DENSITY );
-    densityEl->LinkEndChild(new TiXmlText( Utils::toString(this->CalculateDensity()) ));
+    densityEl->LinkEndChild(new TiXmlText( Utils::toString(/*this->CalculateDensity()*/ " ") ));
     outputContainer->LinkEndChild(densityEl);
     root->LinkEndChild(outputContainer);
 
     doc.LinkEndChild(root);
     doc.SaveFile(fPath);
-}
-
-double Map::CalculateDensity() {
-    double answer = 0;
-    for(int i = 0; i < this->height; i++) {
-        for(int j = 0; j < this->width; j++) {
-            if (this->grid[i][j] != 0) answer++;
-        }
-    }
-
-    return answer / this->width / this->height;
 }
 
 int Map::GetMapArea() {

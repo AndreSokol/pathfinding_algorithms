@@ -7,27 +7,33 @@ class Analysis
 {
 public:
     Analysis();
+    ~Analysis();
 
     void AnalyzeMap(Map *);
     friend std::ostream& operator<< (std::ostream &, const Analysis &);
+
+    int GetObstacleCount();
 private:
-    int CalculateObstacleArea(Map *);
-    double CalculateDensity(Map *);
-    int CalculateObstaclesCount(Map *);
-    double CalculateAverageObstacleArea(Map *);
-    int CalculateOverallPerimeter(Map *);
-    double CalculateAveragePerimeter(Map *);
-    double CalculateAreaDispersion(Map *);
+    void FindObstacles(Map *);
+    void CalculateOverallArea();
+    void CalculateOverallPerimeter(Map *);
+    void CalculateDensity(Map *);
+    void CalculateAverageArea();
+    void CalculateAveragePerimeter();
+    void CalculateAreaDispersion();
     double CalculatePerimeterDispersion(Map *);
+
+    void BreadthFirstSearch(bool **, int, int, std::vector<Utils::Coords> &, Map *);
 
     int overallArea;
     double density;
-    int obstacleCount;
     double averageArea;
     int overallPerimeter;
     double averagePerimeter;
     double areaDispersion;
     double perimeterDispersion;
+    Obstacle * obstacles;
+    int obstacleCount;
 };
 
 #endif // ANALYSIS_H

@@ -12,7 +12,6 @@ public:
     bool GetMapFromXML(const char*);
     friend std::ostream& operator<< (std::ostream &, const Map &);
     void DumpToXML(const char*);
-    double CalculateDensity();
     int GetMapArea();
     int GetHeight();
     int GetWidth();

@@ -66,6 +66,9 @@
 #include  "../tinyxml/tinyxml.h"
 #include <string>
 #include <sstream>
+#include <vector>
+#include <algorithm>
+#include <queue>
 
 #endif
 
@@ -75,6 +78,7 @@
 
 #include "errors.cpp"
 #include "utils.cpp"
+#include "obstacle.cpp"
 #include "algorithm.cpp"
 #include "options.cpp"
 #include "map.cpp"
