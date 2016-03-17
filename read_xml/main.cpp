@@ -23,9 +23,9 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    Analysis analysis;
+    MapAnalyzer analysis = MapAnalyzer(&new_map);
 
-    analysis.AnalyzeMap(&new_map);
+
 
     std::cout << analysis;
 

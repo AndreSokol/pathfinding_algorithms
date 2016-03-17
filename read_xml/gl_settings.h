@@ -82,6 +82,6 @@
 #include "algorithm.cpp"
 #include "options.cpp"
 #include "map.cpp"
-#include "analysis.cpp"
+#include "mapanalyzer.cpp"
 
 #endif

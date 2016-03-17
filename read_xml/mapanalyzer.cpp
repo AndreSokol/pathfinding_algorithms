@@ -1,7 +1,7 @@
-#include "analysis.h"
+#include "mapanalyzer.h"
 #include "gl_settings.h"
 
-Analysis::Analysis()
+MapAnalyzer::MapAnalyzer(Map * mapToAnalyze)
 {
     this->overallArea = 0;
     this->density = 0.0;
@@ -12,23 +12,25 @@ Analysis::Analysis()
     this->perimeterDispersion = 0.0;
     this->obstacles = NULL;
     this->obstacleCount = 0;
+    this->map = mapToAnalyze;
+    this->AnalyzeMap();
 }
 
-Analysis::~Analysis() {
+MapAnalyzer::~MapAnalyzer() {
     delete [] this->obstacles;
 }
 
-void Analysis::AnalyzeMap(Map * map) {
-    this->FindObstacles(map);
+void MapAnalyzer::AnalyzeMap() {
+    this->FindObstacles();
     this->CalculateOverallArea();
-    this->CalculateOverallPerimeter(map);
-    this->CalculateDensity(map);
+    this->CalculateOverallPerimeter();
+    this->CalculateDensity();
     this->CalculateAverageArea();
     this->CalculateAveragePerimeter();
     this->CalculateAreaDispersion();
 }
 
-void Analysis::CalculateOverallArea() {
+void MapAnalyzer::CalculateOverallArea() {
     int answer = 0;
     for(int i = 0; i < this->obstacleCount; i++) {
         answer += this->obstacles[i].area();
@@ -36,15 +38,15 @@ void Analysis::CalculateOverallArea() {
     this->overallArea = answer;
 }
 
-void Analysis::CalculateDensity(Map * map)  {
-    this->density = double(this->overallArea) / double(map->GetMapArea());
+void MapAnalyzer::CalculateDensity()  {
+    this->density = double(this->overallArea) / double(this->map->GetMapArea());
 }
 
-void Analysis::FindObstacles(Map * map)  {
-    bool ** visited = new bool * [map->GetHeight()];
-    for(int i = 0; i < map->GetHeight(); i++) {
-        visited[i] = new bool [map->GetWidth()];
-        for(int j = 0; j < map->GetWidth(); j++)
+void MapAnalyzer::FindObstacles()  {
+    bool ** visited = new bool * [this->map->GetHeight()];
+    for(int i = 0; i < this->map->GetHeight(); i++) {
+        visited[i] = new bool [this->map->GetWidth()];
+        for(int j = 0; j < this->map->GetWidth(); j++)
             visited[i][j] = false;
     }
 
@@ -52,11 +54,11 @@ void Analysis::FindObstacles(Map * map)  {
     std::vector<Obstacle> obstacleCompressed;
 
 
-    for(int i = 0; i < map->GetHeight(); ++i) {
-        for(int j = 0; j < map->GetWidth(); ++j) {
-            if (!visited[i][j] && map->At(i, j) != 0) {
+    for(int i = 0; i < this->map->GetHeight(); ++i) {
+        for(int j = 0; j < this->map->GetWidth(); ++j) {
+            if (!visited[i][j] && this->map->At(i, j) != 0) {
                 obstacleCoord.clear();
-                this->BreadthFirstSearch(visited, i, j, obstacleCoord, map);
+                this->BreadthFirstSearch(visited, i, j, obstacleCoord);
                 std::sort(obstacleCoord.begin(), obstacleCoord.end(), Utils::CoordsComparator);
 
                 Obstacle newObstacle = Obstacle(obstacleCoord);
@@ -71,18 +73,17 @@ void Analysis::FindObstacles(Map * map)  {
         this->obstacles[i] = obstacleCompressed[i];
     }
 
-    for (int i = 0; i < map->GetHeight(); i++) {
+    for (int i = 0; i < this->map->GetHeight(); i++) {
         delete [] visited[i];
     }
 
     delete [] visited;
 }
 
-void Analysis::BreadthFirstSearch(bool ** visited,
+void MapAnalyzer::BreadthFirstSearch(bool ** visited,
                                   int startx,
                                   int starty,
-                                  std::vector<Utils::Coords> & coords,
-                                  Map * map) {
+                                  std::vector<Utils::Coords> & coords) {
     std::queue<Utils::Coords> queue;
     queue.push(Utils::Coords(startx, starty));
     while(queue.size() > 0) {
@@ -91,29 +92,29 @@ void Analysis::BreadthFirstSearch(bool ** visited,
         coords.push_back(currentCoords);
         visited[currentCoords.x][currentCoords.y] = true;
 
-        if (map->At(currentCoords.x + 1, currentCoords.y) != 0 &&
-            map->At(currentCoords.x + 1, currentCoords.y) != ELEMENT_OUT_OF_GRID ) {
+        if (this->map->At(currentCoords.x + 1, currentCoords.y) != 0 &&
+            this->map->At(currentCoords.x + 1, currentCoords.y) != ELEMENT_OUT_OF_GRID ) {
             if(!visited[currentCoords.x + 1][currentCoords.y]) {
                 queue.push(Utils::Coords(currentCoords.x + 1, currentCoords.y));
             }
         }
 
-        if (map->At(currentCoords.x - 1, currentCoords.y) != 0 &&
-            map->At(currentCoords.x - 1, currentCoords.y) != ELEMENT_OUT_OF_GRID ) {
+        if (this->map->At(currentCoords.x - 1, currentCoords.y) != 0 &&
+            this->map->At(currentCoords.x - 1, currentCoords.y) != ELEMENT_OUT_OF_GRID ) {
             if (!visited[currentCoords.x - 1][currentCoords.y]) {
                 queue.push(Utils::Coords(currentCoords.x - 1, currentCoords.y));
             }
         }
 
-        if (map->At(currentCoords.x, currentCoords.y + 1) != 0 &&
-            map->At(currentCoords.x, currentCoords.y + 1) != ELEMENT_OUT_OF_GRID ) {
+        if (this->map->At(currentCoords.x, currentCoords.y + 1) != 0 &&
+            this->map->At(currentCoords.x, currentCoords.y + 1) != ELEMENT_OUT_OF_GRID ) {
             if (!visited[currentCoords.x][currentCoords.y + 1]) {
                 queue.push(Utils::Coords(currentCoords.x, currentCoords.y + 1));
             }
         }
 
-        if (map->At(currentCoords.x, currentCoords.y - 1) != 0 &&
-            map->At(currentCoords.x, currentCoords.y - 1) != ELEMENT_OUT_OF_GRID ) {
+        if (this->map->At(currentCoords.x, currentCoords.y - 1) != 0 &&
+            this->map->At(currentCoords.x, currentCoords.y - 1) != ELEMENT_OUT_OF_GRID ) {
             if (!visited[currentCoords.x][currentCoords.y - 1]) {
                 queue.push(Utils::Coords(currentCoords.x, currentCoords.y - 1));
             }
@@ -126,30 +127,30 @@ void Analysis::BreadthFirstSearch(bool ** visited,
      */
 }
 
-void Analysis::CalculateAverageArea()  {
+void MapAnalyzer::CalculateAverageArea()  {
     this->averageArea = double(this->overallArea) / double(this->obstacleCount);
 }
 
-void Analysis::CalculateOverallPerimeter(Map * map)  {
+void MapAnalyzer::CalculateOverallPerimeter()  {
     int answer = 0;
-    for (int i = 0; i < map->GetHeight(); i++) {
+    for (int i = 0; i < this->map->GetHeight(); i++) {
         for (int j = 0; j < map->GetWidth(); j++) {
-            if (map->At(i, j) == 1) {
-                if (map->At(i - 1, j) == 0) answer++;
-                if (map->At(i + 1, j) == 0) answer++;
-                if (map->At(i, j - 1) == 0) answer++;
-                if (map->At(i, j + 1) == 0) answer++;
+            if (this->map->At(i, j) == 1) {
+                if (this->map->At(i - 1, j) == 0) answer++;
+                if (this->map->At(i + 1, j) == 0) answer++;
+                if (this->map->At(i, j - 1) == 0) answer++;
+                if (this->map->At(i, j + 1) == 0) answer++;
             }
         }
     }
     this->overallPerimeter = answer;
 }
 
-void Analysis::CalculateAveragePerimeter()  {
+void MapAnalyzer::CalculateAveragePerimeter()  {
     this->averagePerimeter = double(this->overallPerimeter) / double(this->obstacleCount);
 }
 
-void Analysis::CalculateAreaDispersion()  {
+void MapAnalyzer::CalculateAreaDispersion()  {
     if (this->obstacleCount < 2) return;
     double ans = 0.0;
     for (int i = 0; i < this->obstacleCount; i++) {
@@ -158,12 +159,12 @@ void Analysis::CalculateAreaDispersion()  {
     this->areaDispersion = ans / double(this->obstacleCount - 1);
 }
 
-double Analysis::CalculatePerimeterDispersion(Map * map)  {
+double MapAnalyzer::CalculatePerimeterDispersion()  {
     // TO BE IMPLEMENTED
     return 0;
 }
 
-std::ostream& operator<< (std::ostream & os, const Analysis & a) {
+std::ostream& operator<< (std::ostream & os, const MapAnalyzer & a) {
     os << "Analysis results:" << std::endl;
     os << "Density " << a.density << std::endl;
     os << "Found " << a.obstacleCount << " obstacles" << std::endl;
@@ -176,6 +177,6 @@ std::ostream& operator<< (std::ostream & os, const Analysis & a) {
     return os;
 }
 
-int Analysis::GetObstacleCount() {
+int MapAnalyzer::GetObstacleCount() {
     return this->obstacleCount;
 }

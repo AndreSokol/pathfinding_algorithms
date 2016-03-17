@@ -15,7 +15,7 @@ SOURCES += main.cpp \
     algorithm.cpp \
     options.cpp \
     map.cpp \
-    analysis.cpp
+    mapanalyzer.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -30,7 +30,7 @@ HEADERS += \
     algorithm.h \
     options.h \
     map.h \
-    analysis.h
+    mapanalyzer.h
 
 DISTFILES += \
     Logic/TagNecessity.txt

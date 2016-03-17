@@ -3,27 +3,27 @@
 
 #include "gl_settings.h"
 
-class Analysis
+class MapAnalyzer
 {
 public:
-    Analysis();
-    ~Analysis();
+    MapAnalyzer(Map *);
+    ~MapAnalyzer();
 
-    void AnalyzeMap(Map *);
-    friend std::ostream& operator<< (std::ostream &, const Analysis &);
+    friend std::ostream& operator<< (std::ostream &, const MapAnalyzer &);
 
     int GetObstacleCount();
 private:
-    void FindObstacles(Map *);
+    void AnalyzeMap();
+    void FindObstacles();
     void CalculateOverallArea();
-    void CalculateOverallPerimeter(Map *);
-    void CalculateDensity(Map *);
+    void CalculateOverallPerimeter();
+    void CalculateDensity();
     void CalculateAverageArea();
     void CalculateAveragePerimeter();
     void CalculateAreaDispersion();
-    double CalculatePerimeterDispersion(Map *);
+    double CalculatePerimeterDispersion();
 
-    void BreadthFirstSearch(bool **, int, int, std::vector<Utils::Coords> &, Map *);
+    void BreadthFirstSearch(bool **, int, int, std::vector<Utils::Coords> &);
 
     int overallArea;
     double density;
@@ -34,6 +34,7 @@ private:
     double perimeterDispersion;
     Obstacle * obstacles;
     int obstacleCount;
+    Map * map;
 };
 
 #endif // ANALYSIS_H
