@@ -9,7 +9,12 @@ std::string toString(const Type &);
 template <typename Type>
 void ReportTagMissing(const std::string &, const Type &);
 
-struct Row {
+/*
+ * We store obstacle as an array of solid lines, called ObstacleRow's.
+ * Each sequence of cells in one rows compresses to one object, describing by row number(x) and
+ * first and last cell coordinates (y1 and y2) and a number of line (x)
+ */
+struct ObstacleRow {
     int x;
     int y1, y2;
 };

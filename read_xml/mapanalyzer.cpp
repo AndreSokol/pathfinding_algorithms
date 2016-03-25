@@ -3,13 +3,13 @@
 
 MapAnalyzer::MapAnalyzer(Map * mapToAnalyze)
 {
-    this->overallArea = 0;
-    this->density = 0.0;
-    this->averageArea = 0.0;
-    this->overallPerimeter = 0;
-    this->averagePerimeter = 0.0;
-    this->areaDispersion = 0.0;
-    this->perimeterDispersion = 0.0;
+    this->occupiedArea = 0;
+    this->occupationDensity = 0.0;
+    this->averageObstacleArea = 0.0;
+    this->overallObstaclesPerimeter = 0;
+    this->averageObstaclePerimeter = 0.0;
+    this->obstaclesAreaDispersion = 0.0;
+    this->obstaclesPerimeterDispersion = 0.0;
     this->obstacles = NULL;
     this->obstacleCount = 0;
     this->map = mapToAnalyze;
@@ -22,7 +22,7 @@ MapAnalyzer::~MapAnalyzer() {
 
 void MapAnalyzer::AnalyzeMap() {
     this->FindObstacles();
-    this->CalculateOverallArea();
+    this->CalculateOccupiedArea();
     this->CalculateOverallPerimeter();
     this->CalculateDensity();
     this->CalculateAverageArea();
@@ -30,16 +30,16 @@ void MapAnalyzer::AnalyzeMap() {
     this->CalculateAreaDispersion();
 }
 
-void MapAnalyzer::CalculateOverallArea() {
+void MapAnalyzer::CalculateOccupiedArea() {
     int answer = 0;
     for(int i = 0; i < this->obstacleCount; i++) {
         answer += this->obstacles[i].area();
     }
-    this->overallArea = answer;
+    this->occupiedArea = answer;
 }
 
 void MapAnalyzer::CalculateDensity()  {
-    this->density = double(this->overallArea) / double(this->map->GetMapArea());
+    this->occupationDensity = double(this->occupiedArea) / double(this->map->GetMapArea());
 }
 
 void MapAnalyzer::FindObstacles()  {
@@ -61,8 +61,9 @@ void MapAnalyzer::FindObstacles()  {
                 this->BreadthFirstSearch(visited, i, j, obstacleCoord);
                 std::sort(obstacleCoord.begin(), obstacleCoord.end(), Utils::CoordsComparator);
 
+                // See Utils::ObstacleRow definition about compressing
                 Obstacle newObstacle = Obstacle(obstacleCoord);
-                    obstacleCompressed.push_back(newObstacle);
+                obstacleCompressed.push_back(newObstacle);
             }
         }
     }
@@ -122,13 +123,13 @@ void MapAnalyzer::BreadthFirstSearch(bool ** visited,
     }
 
     /*
-     * Here must be queue reallocating, but I've got some problems with C++11,
+     * Here must be queue reallocating, but since I've got some problems with C++11,
      * so can't do it like with vector in Utils::reallocateVector()
      */
 }
 
 void MapAnalyzer::CalculateAverageArea()  {
-    this->averageArea = double(this->overallArea) / double(this->obstacleCount);
+    this->averageObstacleArea = double(this->occupiedArea) / double(this->obstacleCount);
 }
 
 void MapAnalyzer::CalculateOverallPerimeter()  {
@@ -143,20 +144,20 @@ void MapAnalyzer::CalculateOverallPerimeter()  {
             }
         }
     }
-    this->overallPerimeter = answer;
+    this->overallObstaclesPerimeter = answer;
 }
 
 void MapAnalyzer::CalculateAveragePerimeter()  {
-    this->averagePerimeter = double(this->overallPerimeter) / double(this->obstacleCount);
+    this->averageObstaclePerimeter = double(this->overallObstaclesPerimeter) / double(this->obstacleCount);
 }
 
 void MapAnalyzer::CalculateAreaDispersion()  {
     if (this->obstacleCount < 2) return;
     double ans = 0.0;
     for (int i = 0; i < this->obstacleCount; i++) {
-        ans += (this->obstacles[i].area() - this->averageArea) * (this->obstacles[i].area() - this->averageArea);
+        ans += (this->obstacles[i].area() - this->averageObstacleArea) * (this->obstacles[i].area() - this->averageObstacleArea);
     }
-    this->areaDispersion = ans / double(this->obstacleCount - 1);
+    this->obstaclesAreaDispersion = ans / double(this->obstacleCount - 1);
 }
 
 double MapAnalyzer::CalculatePerimeterDispersion()  {
@@ -166,13 +167,13 @@ double MapAnalyzer::CalculatePerimeterDispersion()  {
 
 std::ostream& operator<< (std::ostream & os, const MapAnalyzer & a) {
     os << "Analysis results:" << std::endl;
-    os << "Density " << a.density << std::endl;
+    os << "Density " << a.occupationDensity << std::endl;
     os << "Found " << a.obstacleCount << " obstacles" << std::endl;
-    os << "Overall area " << a.overallArea << std::endl;
-    os << "Average area " << a.averageArea << std::endl;
-    os << "Area dispersion " << a.areaDispersion << std::endl;
-    os << "Overall perimeter " << a.overallPerimeter << std::endl;
-    os << "Average perimeter " << a.averagePerimeter << std::endl;
+    os << "Overall area " << a.occupiedArea << std::endl;
+    os << "Average area " << a.averageObstacleArea << std::endl;
+    os << "Area dispersion " << a.obstaclesAreaDispersion << std::endl;
+    os << "Overall perimeter " << a.overallObstaclesPerimeter << std::endl;
+    os << "Average perimeter " << a.averageObstaclePerimeter << std::endl;
 
     return os;
 }

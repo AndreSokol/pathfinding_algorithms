@@ -15,7 +15,7 @@ public:
 private:
     void AnalyzeMap();
     void FindObstacles();
-    void CalculateOverallArea();
+    void CalculateOccupiedArea();
     void CalculateOverallPerimeter();
     void CalculateDensity();
     void CalculateAverageArea();
@@ -25,13 +25,13 @@ private:
 
     void BreadthFirstSearch(bool **, int, int, std::vector<Utils::Coords> &);
 
-    int overallArea;
-    double density;
-    double averageArea;
-    int overallPerimeter;
-    double averagePerimeter;
-    double areaDispersion;
-    double perimeterDispersion;
+    int occupiedArea;
+    double occupationDensity;
+    double averageObstacleArea;
+    int overallObstaclesPerimeter;
+    double averageObstaclePerimeter;
+    double obstaclesAreaDispersion;
+    double obstaclesPerimeterDispersion;
     Obstacle * obstacles;
     int obstacleCount;
     Map * map;

@@ -16,7 +16,7 @@ public:
     int area();
     int perimeter();
 private:
-    Utils::Row * _rows;
+    Utils::ObstacleRow * _rows;
     int _rowsCount;
     int _perimeter;
     int _area;
