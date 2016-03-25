@@ -23,7 +23,7 @@ private:
     void CalculateAreaDispersion();
     double CalculatePerimeterDispersion();
 
-    void BreadthFirstSearch(bool **, int, int, std::vector<Utils::Coords> &);
+    void BreadthFirstSearch(std::set<Utils::Coords> &, int, int, std::vector<Utils::Coords> &);
 
     int occupiedArea;
     double occupationDensity;

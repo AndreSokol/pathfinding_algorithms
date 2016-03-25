@@ -19,10 +19,6 @@ void reallocateVector(std::vector<Type> & v) {
     std::vector<Type>().swap(v);
 }
 
-inline bool CoordsComparator(const Coords & a, const Coords & b) {
-    if (a.x == b.x) return a.y < b.y;
-    else return a.x < b.x;
-}
 
 Coords::Coords(const int & a, const int & b) {
     this->x = a;
@@ -32,4 +28,10 @@ Coords::Coords(const int & a, const int & b) {
 Coords Coords::operator+(const Coords & other) {
     return Coords(this->x + other.x, this->y + other.y);
 }
+
+bool operator< (const Coords & a, const Coords & b) {
+    if (a.x == b.x) return a.y < b.y;
+    return a.x < b.x;
+}
+
 }

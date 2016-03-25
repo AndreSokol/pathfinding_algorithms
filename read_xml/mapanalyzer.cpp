@@ -43,12 +43,7 @@ void MapAnalyzer::CalculateDensity()  {
 }
 
 void MapAnalyzer::FindObstacles()  {
-    bool ** visited = new bool * [this->map->GetHeight()];
-    for(int i = 0; i < this->map->GetHeight(); i++) {
-        visited[i] = new bool [this->map->GetWidth()];
-        for(int j = 0; j < this->map->GetWidth(); j++)
-            visited[i][j] = false;
-    }
+    std::set<Utils::Coords> visited;
 
     std::vector<Utils::Coords> obstacleCoord;
     std::vector<Obstacle> obstacleCompressed;
@@ -56,10 +51,11 @@ void MapAnalyzer::FindObstacles()  {
 
     for(int i = 0; i < this->map->GetHeight(); ++i) {
         for(int j = 0; j < this->map->GetWidth(); ++j) {
-            if (!visited[i][j] && this->map->At(i, j) != 0) {
+            if (visited.find(Utils::Coords(i, j)) == visited.end() &&
+                    this->map->At(i, j) != 0) {
                 obstacleCoord.clear();
                 this->BreadthFirstSearch(visited, i, j, obstacleCoord);
-                std::sort(obstacleCoord.begin(), obstacleCoord.end(), Utils::CoordsComparator);
+                std::sort(obstacleCoord.begin(), obstacleCoord.end());
 
                 // See Utils::ObstacleRow definition about compressing
                 Obstacle newObstacle = Obstacle(obstacleCoord);
@@ -73,15 +69,9 @@ void MapAnalyzer::FindObstacles()  {
     for (int i = 0; i < this->obstacleCount; ++i) {
         this->obstacles[i] = obstacleCompressed[i];
     }
-
-    for (int i = 0; i < this->map->GetHeight(); i++) {
-        delete [] visited[i];
-    }
-
-    delete [] visited;
 }
 
-void MapAnalyzer::BreadthFirstSearch(bool ** visited,
+void MapAnalyzer::BreadthFirstSearch(std::set<Utils::Coords> & visited,
                                   int startx,
                                   int starty,
                                   std::vector<Utils::Coords> & coords) {
@@ -91,43 +81,16 @@ void MapAnalyzer::BreadthFirstSearch(bool ** visited,
         Utils::Coords currentCoords = queue.front();
         queue.pop();
         coords.push_back(currentCoords);
-        visited[currentCoords.x][currentCoords.y] = true;
+        visited.insert(currentCoords);
         for(int i = 0; i < 4; i++) {
-            if (this->map->At(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]) != 0 &&
-                this->map->At(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]) != ELEMENT_OUT_OF_GRID ) {
-                if(!visited[(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]).x][(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]).y]) {
-                    queue.push(Utils::Coords(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]));
+            Utils::Coords coordsToCheck = currentCoords + Utils::NEIGHBOURS_NO_DIAG[i];
+            if (this->map->At(coordsToCheck) != 0 &&
+                this->map->At(coordsToCheck) != ELEMENT_OUT_OF_GRID ) {
+                if(visited.count(coordsToCheck) == 0) {
+                    queue.push(coordsToCheck);
                 }
             }
         }
-/*
-        if (this->map->At(currentCoords.x + 1, currentCoords.y) != 0 &&
-            this->map->At(currentCoords.x + 1, currentCoords.y) != ELEMENT_OUT_OF_GRID ) {
-            if(!visited[currentCoords.x + 1][currentCoords.y]) {
-                queue.push(Utils::Coords(currentCoords.x + 1, currentCoords.y));
-            }
-        }
-
-        if (this->map->At(currentCoords.x - 1, currentCoords.y) != 0 &&
-            this->map->At(currentCoords.x - 1, currentCoords.y) != ELEMENT_OUT_OF_GRID ) {
-            if (!visited[currentCoords.x - 1][currentCoords.y]) {
-                queue.push(Utils::Coords(currentCoords.x - 1, currentCoords.y));
-            }
-        }
-
-        if (this->map->At(currentCoords.x, currentCoords.y + 1) != 0 &&
-            this->map->At(currentCoords.x, currentCoords.y + 1) != ELEMENT_OUT_OF_GRID ) {
-            if (!visited[currentCoords.x][currentCoords.y + 1]) {
-                queue.push(Utils::Coords(currentCoords.x, currentCoords.y + 1));
-            }
-        }
-
-        if (this->map->At(currentCoords.x, currentCoords.y - 1) != 0 &&
-            this->map->At(currentCoords.x, currentCoords.y - 1) != ELEMENT_OUT_OF_GRID ) {
-            if (!visited[currentCoords.x][currentCoords.y - 1]) {
-                queue.push(Utils::Coords(currentCoords.x, currentCoords.y - 1));
-            }
-        }*/
     }
 
     /*

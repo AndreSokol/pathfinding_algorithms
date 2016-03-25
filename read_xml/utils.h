@@ -26,7 +26,7 @@ struct Coords {
     Coords operator+(const Coords &);
 };
 
-inline bool CoordsComparator (const Coords &, const Coords &);
+bool operator<(const Coords &, const Coords &);
 
 template<typename Type>
 void reallocateVector(std::vector<Type> &);
