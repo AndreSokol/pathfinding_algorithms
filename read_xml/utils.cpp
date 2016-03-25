@@ -28,4 +28,8 @@ Coords::Coords(const int & a, const int & b) {
     this->x = a;
     this->y = b;
 }
+
+Coords Coords::operator+(const Coords & other) {
+    return Coords(this->x + other.x, this->y + other.y);
+}
 }

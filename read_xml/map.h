@@ -16,6 +16,7 @@ public:
     int GetHeight();
     int GetWidth();
     int At(int, int);
+    int At(Utils::Coords);
 
 private:
     int **grid;

@@ -92,7 +92,15 @@ void MapAnalyzer::BreadthFirstSearch(bool ** visited,
         queue.pop();
         coords.push_back(currentCoords);
         visited[currentCoords.x][currentCoords.y] = true;
-
+        for(int i = 0; i < 4; i++) {
+            if (this->map->At(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]) != 0 &&
+                this->map->At(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]) != ELEMENT_OUT_OF_GRID ) {
+                if(!visited[(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]).x][(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]).y]) {
+                    queue.push(Utils::Coords(currentCoords + Utils::NEIGHBOURS_NO_DIAG[i]));
+                }
+            }
+        }
+/*
         if (this->map->At(currentCoords.x + 1, currentCoords.y) != 0 &&
             this->map->At(currentCoords.x + 1, currentCoords.y) != ELEMENT_OUT_OF_GRID ) {
             if(!visited[currentCoords.x + 1][currentCoords.y]) {
@@ -119,7 +127,7 @@ void MapAnalyzer::BreadthFirstSearch(bool ** visited,
             if (!visited[currentCoords.x][currentCoords.y - 1]) {
                 queue.push(Utils::Coords(currentCoords.x, currentCoords.y - 1));
             }
-        }
+        }*/
     }
 
     /*

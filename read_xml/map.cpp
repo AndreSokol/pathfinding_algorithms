@@ -185,6 +185,13 @@ int Map::At(int i, int j) {
     return this->grid[i][j];
 }
 
+int Map::At(Utils::Coords coords) {
+    if (coords.x < 0 || coords.x >= this->height || coords.y < 0 || coords.y >= this->width)
+        return ELEMENT_OUT_OF_GRID;
+    return this->grid[coords.x][coords.y];
+}
+
+
 std::ostream& operator<< (std::ostream &os, const Map& map) {
     os << "Map \"" << map.map_description << "\":" << std::endl;
     os << "size " << map.height << "x" << map.width << ", cellsize " << map.cellsize << std::endl;

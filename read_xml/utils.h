@@ -23,12 +23,24 @@ struct Coords {
     Coords(const int &, const int &);
     int x;
     int y;
+    Coords operator+(const Coords &);
 };
 
 inline bool CoordsComparator (const Coords &, const Coords &);
 
 template<typename Type>
 void reallocateVector(std::vector<Type> &);
+
+
+/* Some const arrays to come round all neighbors in a pretty way */
+const Coords NEIGHBOURS_NO_DIAG[4] = {Coords(1, 0),
+                                      Coords(0, 1),
+                                      Coords(-1, 0),
+                                      Coords(0, -1)};
+
+const Coords NEIGHBOURS_DIAG[8] = {Coords(-1, -1), Coords(-1, 0), Coords(-1, 1),
+                                   Coords(0, -1),                 Coords(0, 1),
+                                   Coords(1, -1),  Coords(1, 0),  Coords(1, 1)};
 
 }
 #endif // UTILS_H

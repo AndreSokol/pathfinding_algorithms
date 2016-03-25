@@ -1,5 +1,6 @@
 TEMPLATE = app
 CONFIG += console
+CONFIG += static
 CONFIG -= app_bundle
 CONFIG -= qt
 DEFINES -= UNICODE QT_LARGEFILE_SUPPORT
