@@ -5,14 +5,16 @@
 
 class Options {
 public:
-    Options();
+    Options(TiXmlHandle);
     ~Options();
 
-    bool GetDataFromXml(TiXmlHandle);
+    TiXmlElement* DumpToXmlElement();
 private:
     int logLevel;
     std::string logPath;
     std::string logFileName;
+
+    bool GetDataFromXml(TiXmlHandle);
 };
 
 #endif // OPTIONS_H

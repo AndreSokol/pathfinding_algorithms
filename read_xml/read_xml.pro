@@ -1,8 +1,11 @@
 TEMPLATE = app
 CONFIG += console
 CONFIG += static
-CONFIG -= app_bundle
+#CONFIG += static_runtime
+#CONFIG -= app_bundle
 CONFIG -= qt
+#CONFIG -= threads
+#CONFIG -= spec
 DEFINES -= UNICODE QT_LARGEFILE_SUPPORT
 
 SOURCES += main.cpp \
@@ -16,22 +19,20 @@ SOURCES += main.cpp \
     algorithm.cpp \
     options.cpp \
     map.cpp \
-    mapanalyzer.cpp
-
-include(deployment.pri)
-qtcAddDeployment()
+    mapanalyzer.cpp \
+    xmlobject.cpp
 
 HEADERS += \
     ../tinyxml/tinystr.h \
     ../tinyxml/tinyxml.h \
-    ../tinyxml/map.h \
     gl_settings.h \
     utils.h \
     obstacle.h \
     algorithm.h \
     options.h \
     map.h \
-    mapanalyzer.h
+    mapanalyzer.h \
+    xmlobject.h
 
 DISTFILES += \
     Logic/TagNecessity.txt

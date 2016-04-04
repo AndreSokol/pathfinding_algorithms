@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "gl_settings.h"
+
 namespace Utils {
 
 template <typename Type>
@@ -20,6 +22,7 @@ struct ObstacleRow {
 };
 
 struct Coords {
+    Coords();
     Coords(const int &, const int &);
     int x;
     int y;

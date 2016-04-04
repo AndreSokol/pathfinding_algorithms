@@ -19,6 +19,10 @@ void reallocateVector(std::vector<Type> & v) {
     std::vector<Type>().swap(v);
 }
 
+Coords::Coords() {
+    x = 0;
+    y = 0;
+}
 
 Coords::Coords(const int & a, const int & b) {
     this->x = a;

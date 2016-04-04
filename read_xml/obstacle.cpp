@@ -1,10 +1,10 @@
 #include "obstacle.h"
 
 Obstacle::Obstacle() {
-    this->_area = 0;
-    this->_perimeter = 0;
-    this->_rowsCount = 0;
-    this->_rows = NULL;
+    _area = 0;
+    _perimeter = 0;
+    _rowsCount = 0;
+    _rows = NULL;
 }
 
 Obstacle::Obstacle(const std::vector<Utils::Coords> & v)
@@ -28,51 +28,52 @@ Obstacle::Obstacle(const std::vector<Utils::Coords> & v)
     }
     compressedV.push_back(newRow);
 
-    this->_rowsCount = compressedV.size();
+    _rowsCount = compressedV.size();
 
-    this->_rows = new Utils::ObstacleRow[this->_rowsCount];
+    _rows = new Utils::ObstacleRow[_rowsCount];
 
-    for (int i = 0; i < this->_rowsCount; ++i) {
-        this->_rows[i] = compressedV[i];
+    for (int i = 0; i < _rowsCount; ++i) {
+        _rows[i] = compressedV[i];
     }
 
     Utils::reallocateVector(compressedV);
 
-    this->calculateArea();
-    this->_perimeter = this->calculatePerimeter();
+    calculateArea();
+    _perimeter = calculatePerimeter();
 }
 
 Obstacle::~Obstacle() {
-    delete [] this->_rows;
+    delete [] _rows;
 }
 
 Obstacle& Obstacle::operator= (const Obstacle &other) {
-    this->_area = other._area;
-    this->_perimeter = other._perimeter;
-    this->_rowsCount = other._rowsCount;
-    this->_rows = new Utils::ObstacleRow[this->_rowsCount];
-    for(int i = 0; i < this->_rowsCount; ++i) {
-        this->_rows[i] = other._rows[i];
+    _area = other._area;
+    _perimeter = other._perimeter;
+    _rowsCount = other._rowsCount;
+    _rows = new Utils::ObstacleRow[_rowsCount];
+    for(int i = 0; i < _rowsCount; ++i) {
+        _rows[i] = other._rows[i];
     }
+    return *this;
 }
 
 int Obstacle::size() {
-    return this->_rowsCount;
+    return _rowsCount;
 }
 
 int Obstacle::area() {
-    return this->_area;
+    return _area;
 }
 
 int Obstacle::perimeter() {
-    return this->_perimeter;
+    return _perimeter;
 }
 
 void Obstacle::calculateArea() {
     int ans = 0;
-    for (int i = 0; i < this->_rowsCount; i++)
-        ans += this->_rows[i].y2 - this->_rows[i].y1 + 1;
-    this->_area = ans;
+    for (int i = 0; i < _rowsCount; i++)
+        ans += _rows[i].y2 - _rows[i].y1 + 1;
+    _area = ans;
 }
 
 int Obstacle::calculatePerimeter() {

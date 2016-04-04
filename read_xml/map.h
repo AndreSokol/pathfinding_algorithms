@@ -6,18 +6,17 @@
 class Map
 {
 public:
-    Map();
+    Map(TiXmlHandle);
     ~Map();
 
-    bool GetMapFromXML(const char*);
-    friend std::ostream& operator<< (std::ostream &, const Map &);
-    void DumpToXML(const char*);
+    TiXmlElement* DumpToXmlElement();
     int GetMapArea();
     int GetHeight();
     int GetWidth();
     int At(int, int);
     int At(Utils::Coords);
 
+    friend std::ostream& operator<< (std::ostream &, const Map &);
 private:
     int **grid;
     int width;
@@ -27,9 +26,11 @@ private:
     int starty;
     int finishx;
     int finishy;
-    std::string map_description;
-    Algorithm * algorithm;
-    Options * options;
+    std::string mapDescription;
+    //Algorithm * algorithm;
+    //Options * options;
+
+    void GetMapFromXML(TiXmlHandle);
 };
 
 #endif // MAP_H

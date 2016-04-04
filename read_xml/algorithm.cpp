@@ -1,18 +1,21 @@
 #include "algorithm.h"
 #include "gl_settings.h"
 
-Algorithm::Algorithm (){
-    this->searchType = "astar";
-    this->metricType = "euclid";
-    this->hWeight = 1.0;
-    this->breakingTies = "gmax";
-    this->lineCost = 1.0;
-    this->diagonalCost = 1.414;
-    this->allowDiagonal = false;
-    this->allowSqueeze = false;
+Algorithm::Algorithm(TiXmlHandle rootHandle) {
+    searchType = "astar";
+    metricType = "euclid";
+    hWeight = 1.0;
+    breakingTies = "gmax";
+    lineCost = 1.0;
+    diagonalCost = 1.414;
+    allowDiagonal = false;
+    allowSqueeze = false;
+
+    GetDataFromXml(rootHandle);
 }
 
-bool Algorithm::GetDataFromXml(TiXmlHandle algoHandle) {
+bool Algorithm::GetDataFromXml(TiXmlHandle rootHandle) {
+    TiXmlHandle algoHandle = rootHandle.FirstChild( TAG_ALGO_CONTAINER );
     if(!algoHandle.ToElement()) throw MissingTagError( TAG_ALGO_CONTAINER );
 
     TiXmlElement * algoType = algoHandle.FirstChild( TAG_ALGO_TYPE ).ToElement();

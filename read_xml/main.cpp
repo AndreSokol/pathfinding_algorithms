@@ -6,10 +6,13 @@ int main(int argc, char *argv[])
         std::cerr << "Usage: .exe <filePath>" << std::endl;
         return 0;
     }
-    Map new_map;
+    XMLObject new_map;
+
+    /*LOG_FILE_NAME = argv[1] + "_log.txt";
+    LOG_PATH = 1;*/
 
     try {
-        new_map.GetMapFromXML(argv[1]);
+        new_map.LoadFromFile(argv[1]);
     }
     catch (MissingTagError e) {
         std::cerr << "[ERROR] Cannot find nessecary tag <" << e.tag() << ">! Exiting programm..." << std::endl;
@@ -23,13 +26,9 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    MapAnalyzer analysis = MapAnalyzer(&new_map);
-
-
-
-    std::cout << analysis;
-
-    new_map.DumpToXML("out.xml");
+    new_map.AnalyzeMap();
+    std::cout << new_map;
+    new_map.DumpToFile();
 
     return 0;
 }

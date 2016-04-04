@@ -5,14 +5,12 @@
 
 class Algorithm {
 public:
-    Algorithm();
+    Algorithm(TiXmlHandle);
     ~Algorithm();
 
-    bool GetDataFromXml(TiXmlHandle);
     friend std::ostream& operator<< (std::ostream &, const Algorithm &);
-    TiXmlElement* DumpToXmlElement ();
+    TiXmlElement* DumpToXmlElement();
 private:
-
     std::string searchType;
     std::string metricType;
     double hWeight;
@@ -21,5 +19,7 @@ private:
     double diagonalCost;
     bool allowDiagonal;
     bool allowSqueeze;
+
+    bool GetDataFromXml(TiXmlHandle);
 };
 #endif // ALGORITHM_H

@@ -1,3 +1,36 @@
+#ifndef GL_LIBRARIES
+#define GL_LIBRARIES
+
+/*
+ * Importing general libraries
+ */
+
+#include <iostream>
+#include  "../tinyxml/tinyxml.h"
+#include <string>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <set>
+
+#endif
+
+
+#ifndef PROJECT_FILES
+#define PROJECT_FILES
+
+#include "errors.cpp"
+#include "utils.cpp"
+#include "obstacle.cpp"
+#include "algorithm.cpp"
+#include "options.cpp"
+#include "map.cpp"
+#include "mapanalyzer.cpp"
+#include "xmlobject.cpp"
+
+#endif
+
 #ifndef GL_VARS
 #define GL_VARS
 
@@ -47,42 +80,21 @@
  * Output attributes and params
  */
 
-#define TAG_OUTPUT_CONTAINER    "output"
-#define TAG_OUTPUT_DENSITY      "density"
+#define TAG_ANALYSIS_CONTAINER                       "output"
+#define TAG_ANALYSIS_OCCUPATION_DENSITY              "density"
+#define TAG_ANALYSIS_OBSTACLE_COUNT                  "obstaclecount"
+#define TAG_ANALYSIS_TOTAL_OBSTACLE_AREA             "totalarea"
+#define TAG_ANALYSIS_TOTAL_OBSTACLE_PERIMETER        "totalperimeter"
+#define TAG_ANALYSIS_AVERAGE_OBSTACLE_AREA           "averagearea"
+#define TAG_ANALYSIS_AVERAGE_OBSTACLE_PERIMETER      "averageperimeter"
+#define TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION        "areadispersion"
+#define TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION   "perimeterdispersion"
 
 #define OUTPUT_LINE_NUMBER_ATTR "number"
 #define OUTPUT_MAP_SEPARATOR    " "
-
-#endif // GL_VARS
-
-#ifndef GL_LIBRARIES
-#define GL_LIBRARIES
-
 /*
- * Importing general libraries
- */
-
-#include <iostream>
-#include  "../tinyxml/tinyxml.h"
-#include <string>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include <queue>
-#include <set>
-
-#endif
-
-
-#ifndef PROJECT_FILES
-#define PROJECT_FILES
-
-#include "errors.cpp"
-#include "utils.cpp"
-#include "obstacle.cpp"
-#include "algorithm.cpp"
-#include "options.cpp"
-#include "map.cpp"
-#include "mapanalyzer.cpp"
-
-#endif
+int LOG_LEVEL = 1;
+std::string LOG_PATH;
+std::string LOG_FILE_NAME;
+*/
+#endif // GL_VARS

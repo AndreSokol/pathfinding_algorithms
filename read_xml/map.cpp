@@ -1,42 +1,31 @@
 #include "map.h"
 #include "gl_settings.h"
 
-Map::Map() {
-    this->map_description = "Untitled";
-    this->algorithm = new Algorithm();
-    this->options = new Options();
-    this->startx = 0;
-    this->starty = 0;
-    this->finishx = 0;
-    this->finishy = 0;
-    this->cellsize = DEFAULT_CELLSIZE;
-    this->height = 0;
-    this->width = 0;
-    this->grid = NULL;
+Map::Map(TiXmlHandle rootHandle) {
+    mapDescription = "Untitled";
+    startx = 0;
+    starty = 0;
+    finishx = 0;
+    finishy = 0;
+    cellsize = DEFAULT_CELLSIZE;
+    height = 0;
+    width = 0;
+    grid = NULL;
+
+    GetMapFromXML(rootHandle);
 }
 
 Map::~Map () {
-    for (int i = 0; i < this->height; i++) {
+    for (int i = 0; i < height; i++) {
         delete [] grid[i];
     }
     delete [] grid;
-
-    delete this->algorithm;
-    delete this->options;
 }
 
-bool Map::GetMapFromXML(const char * fPath) {
-    TiXmlDocument doc;
-    doc.LoadFile(fPath);
-    if( doc.Error() ) throw ParserError(doc.ErrorDesc(), fPath);
-    TiXmlHandle docHandle( &doc );
-
-    TiXmlHandle rootHandle = docHandle.FirstChild( TAG_ROOT );
-    if(!rootHandle.ToElement()) throw MissingTagError( TAG_ROOT );
-
+void Map::GetMapFromXML(TiXmlHandle rootHandle) {
     TiXmlElement* mapDesc = rootHandle.FirstChild( TAG_DESC ).ToElement();
-    if(!mapDesc) Utils::ReportTagMissing( TAG_DESC , this->map_description);
-    else         this->map_description = mapDesc->GetText();
+    if(!mapDesc) Utils::ReportTagMissing( TAG_DESC , this->mapDescription);
+    else         this->mapDescription = mapDesc->GetText();
 
     TiXmlHandle mapHandle = rootHandle.FirstChild( TAG_MAP_CONTAINER );
     if(!mapHandle.ToElement()) throw MissingTagError( TAG_MAP_CONTAINER );
@@ -84,31 +73,22 @@ bool Map::GetMapFromXML(const char * fPath) {
         /*
          * throw with line numbers, to be implemented
          */
-
         std::stringstream rowStream(rowAsXmlElement->GetText());
         for(int j = 0; j < this->width; j++){
             rowStream >> this->grid[i][j];
             rowStream.ignore(1, INPUT_GRID_SEPARATOR );
         }
     }
-
-    TiXmlHandle algoHandle = rootHandle.FirstChild( TAG_ALGO_CONTAINER );
-    this->algorithm->GetDataFromXml(algoHandle);
-
-    TiXmlHandle optionsHandle = rootHandle.FirstChild( TAG_OPTIONS_CONTAINER );
-    this->options->GetDataFromXml(optionsHandle);
-
-    return true;
 }
 
-void Map::DumpToXML(const char * fPath) {
-    TiXmlDocument doc;
-    TiXmlElement* root = new TiXmlElement( TAG_ROOT );
+TiXmlElement* Map::DumpToXmlElement() {
+    /*TiXmlDocument doc;
+    TiXmlElement* root = new TiXmlElement( TAG_ROOT );*/
     TiXmlElement* mapContainer = new TiXmlElement( TAG_MAP_CONTAINER );
 
     TiXmlElement* mapDesc = new TiXmlElement( TAG_DESC );
-    mapDesc->LinkEndChild(new TiXmlText(this->map_description));
-    root->LinkEndChild(mapDesc);
+    mapDesc->LinkEndChild(new TiXmlText(this->mapDescription));
+    mapContainer->LinkEndChild(mapDesc);
 
     TiXmlElement* widthEl = new TiXmlElement( TAG_MAP_WIDTH );
     widthEl->LinkEndChild(new TiXmlText( Utils::toString(this->width) ));
@@ -152,53 +132,48 @@ void Map::DumpToXML(const char * fPath) {
     }
     mapContainer->LinkEndChild(gridEl);
 
-    root->LinkEndChild(mapContainer);
-
-    TiXmlElement * algoContainer = this->algorithm->DumpToXmlElement();
-    root->LinkEndChild(algoContainer);
+    /*root->LinkEndChild(mapContainer);
 
     TiXmlElement * outputContainer = new TiXmlElement( TAG_OUTPUT_CONTAINER );
     TiXmlElement * densityEl = new TiXmlElement( TAG_OUTPUT_DENSITY );
-    densityEl->LinkEndChild(new TiXmlText( Utils::toString(/*this->CalculateDensity()*/ " ") ));
+    densityEl->LinkEndChild(new TiXmlText( Utils::toString(/*this->CalculateDensity() " ") ));
     outputContainer->LinkEndChild(densityEl);
     root->LinkEndChild(outputContainer);
 
     doc.LinkEndChild(root);
-    doc.SaveFile(fPath);
+    doc.SaveFile(fPath);*/
+
+    return mapContainer;
 }
 
 int Map::GetMapArea() {
-    return this->height * this->width;
+    return height * width;
 }
 
 int Map::GetHeight() {
-    return this->height;
+    return height;
 }
 
 int Map::GetWidth() {
-    return this->width;
+    return width;
 }
 
 int Map::At(int i, int j) {
-    if (i < 0 || i >= this->height || j < 0 || j >= this->width)
+    if (i < 0 || i >= height || j < 0 || j >= width)
         return ELEMENT_OUT_OF_GRID;
-    return this->grid[i][j];
+    return grid[i][j];
 }
 
 int Map::At(Utils::Coords coords) {
-    if (coords.x < 0 || coords.x >= this->height || coords.y < 0 || coords.y >= this->width)
+    if (coords.x < 0 || coords.x >= height || coords.y < 0 || coords.y >= width)
         return ELEMENT_OUT_OF_GRID;
-    return this->grid[coords.x][coords.y];
+    return grid[coords.x][coords.y];
 }
 
-
 std::ostream& operator<< (std::ostream &os, const Map& map) {
-    os << "Map \"" << map.map_description << "\":" << std::endl;
+    os << "Map \"" << map.mapDescription << "\":" << std::endl;
     os << "size " << map.height << "x" << map.width << ", cellsize " << map.cellsize << std::endl;
     os << "looking for route from (" << map.startx << ", " << map.starty << ") to (" << map.finishx << ", " <<
                                                                                         map.finishy << ")" << std::endl;
-    os << "with following algorithm:" << std::endl;
-    os << *(map.algorithm);
-
     return os;
 }

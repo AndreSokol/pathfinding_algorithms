@@ -12,6 +12,7 @@ public:
     friend std::ostream& operator<< (std::ostream &, const MapAnalyzer &);
 
     int GetObstacleCount();
+    TiXmlElement* DumpToXmlElement();
 private:
     void AnalyzeMap();
     void FindObstacles();
@@ -23,7 +24,7 @@ private:
     void CalculateAreaDispersion();
     double CalculatePerimeterDispersion();
 
-    void BreadthFirstSearch(std::set<Utils::Coords> &, int, int, std::vector<Utils::Coords> &);
+    void BreadthFirstSearch(std::set<Utils::Coords> &, Utils::Coords, std::vector<Utils::Coords> &);
 
     int occupiedArea;
     double occupationDensity;
