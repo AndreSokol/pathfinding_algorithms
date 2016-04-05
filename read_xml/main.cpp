@@ -33,3 +33,10 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+/*
+ * TO-DO list
+ *
+ * - apply DRY to DumpToXml and GetFromXml functions
+ * - implement extended log with process statuses
+ *
+ */

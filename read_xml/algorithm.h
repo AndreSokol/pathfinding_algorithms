@@ -9,6 +9,7 @@ public:
     ~Algorithm();
 
     friend std::ostream& operator<< (std::ostream &, const Algorithm &);
+
     TiXmlElement* DumpToXmlElement();
 private:
     std::string searchType;

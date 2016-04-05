@@ -30,8 +30,8 @@ bool Options::GetDataFromXml(TiXmlHandle rootHandle) {
     if(!optionsHandle.ToElement()) throw MissingTagError( TAG_OPTIONS_CONTAINER );
 
     TiXmlElement * logLevel = optionsHandle.FirstChild( TAG_OPTIONS_LOG_LEVEL ).ToElement();
-    if(logLevel) std::istringstream(logLevel->GetText()) >> this->logLevel;
-    else         Utils::ReportTagMissing( TAG_OPTIONS_LOG_FILENAME , this->logLevel);
+    if(logLevel) std::istringstream(logLevel->GetText()) >> logLevel;
+    else         Utils::ReportTagMissing( TAG_OPTIONS_LOG_FILENAME , logLevel);
 
 
     // TO BE IMPLEMENTED

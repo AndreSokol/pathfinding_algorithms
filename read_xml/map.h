@@ -27,8 +27,6 @@ private:
     int finishx;
     int finishy;
     std::string mapDescription;
-    //Algorithm * algorithm;
-    //Options * options;
 
     void GetMapFromXML(TiXmlHandle);
 };
