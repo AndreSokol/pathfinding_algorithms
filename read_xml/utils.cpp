@@ -2,6 +2,33 @@
 #include "gl_settings.h"
 
 namespace Utils {
+
+void parseValueFromXmlNode(const TiXmlHandle & rootHandle, const char * tagName,
+                           std::string & fieldToWrite, bool isObliged = false) {
+
+    TiXmlElement* XmlElement = rootHandle.FirstChild( tagName ).ToElement();
+    if(!XmlElement) {
+        if (isObliged) throw MissingTagError( tagName );
+        else           ReportTagMissing( tagName , fieldToWrite);
+    } else {
+        fieldToWrite = XmlElement->GetText();
+    }
+}
+
+template <typename Type>
+void parseValueFromXmlNode(const TiXmlHandle & rootHandle, const char * tagName,
+                           Type & fieldToWrite, bool isObliged = false) {
+
+    TiXmlElement* XmlElement = rootHandle.FirstChild( tagName ).ToElement();
+    if(!XmlElement) {
+        if (isObliged) throw MissingTagError( tagName );
+        else           ReportTagMissing( tagName , fieldToWrite);
+    } else {
+        std::istringstream(XmlElement->GetText()) >> fieldToWrite;
+    }
+}
+
+
 template <typename Type>
 std::string toString(const Type& element) {
     std::stringstream sstream;

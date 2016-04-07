@@ -59,7 +59,7 @@ void XMLObject::DumpToFile() {
 
 std::ostream& operator<< (std::ostream & os, const XMLObject & a) {
     if(a.analyser != NULL) os << *(a.analyser);
-    else                   os << "Map has not yet been analyzed" << endl;
+    else                   os << "Map has not yet been analyzed" << std::endl;
 
     return os;
 }

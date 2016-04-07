@@ -6,6 +6,9 @@
 namespace Utils {
 
 template <typename Type>
+void parseValueFromXmlNode(const TiXmlHandle &, const char *, Type &, bool isObliged = false);
+
+template <typename Type>
 std::string toString(const Type &);
 
 template <typename Type>

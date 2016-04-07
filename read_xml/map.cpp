@@ -23,40 +23,18 @@ Map::~Map () {
 }
 
 void Map::GetMapFromXML(TiXmlHandle rootHandle) {
-    TiXmlElement* mapDesc = rootHandle.FirstChild( TAG_DESC ).ToElement();
-    if(!mapDesc) Utils::ReportTagMissing( TAG_DESC , this->mapDescription);
-    else         mapDescription = mapDesc->GetText();
+    Utils::parseValueFromXmlNode(rootHandle, TAG_DESC, mapDescription);
 
     TiXmlHandle mapHandle = rootHandle.FirstChild( TAG_MAP_CONTAINER );
     if(!mapHandle.ToElement()) throw MissingTagError( TAG_MAP_CONTAINER );
 
-    TiXmlElement* map_width = mapHandle.FirstChildElement( TAG_MAP_WIDTH ).ToElement();
-    if(!map_width) throw MissingTagError( TAG_MAP_WIDTH );
-    std::istringstream(map_width->GetText()) >> width;
-
-    TiXmlElement* map_height = mapHandle.FirstChildElement( TAG_MAP_HEIGHT ).ToElement();
-    if(!map_height) throw MissingTagError( TAG_MAP_HEIGHT );
-    std::istringstream(map_height->GetText()) >> height;
-
-    TiXmlElement* map_cellsize = mapHandle.FirstChildElement( TAG_CELLSIZE ).ToElement();
-    if(!map_cellsize) Utils::ReportTagMissing(TAG_CELLSIZE, cellsize);
-    else              std::istringstream(map_cellsize->GetText()) >> cellsize;
-
-    TiXmlElement* map_startx = mapHandle.FirstChildElement( TAG_START_X ).ToElement();
-    if(!map_startx) Utils::ReportTagMissing(TAG_START_X, startx);
-    else            std::istringstream(map_startx->GetText()) >> startx;
-
-    TiXmlElement* map_starty = mapHandle.FirstChildElement( TAG_START_Y ).ToElement();
-    if(!map_starty) Utils::ReportTagMissing(TAG_START_Y, starty);
-    else            std::istringstream(map_starty->GetText()) >> starty;
-
-    TiXmlElement* map_finishx = mapHandle.FirstChildElement( TAG_FINISH_X ).ToElement();
-    if(!map_finishx) Utils::ReportTagMissing(TAG_FINISH_X, finishx);
-    else             std::istringstream(map_finishx->GetText()) >> finishx;
-
-    TiXmlElement* map_finishy = mapHandle.FirstChildElement( TAG_FINISH_Y ).ToElement();
-    if(!map_finishy) Utils::ReportTagMissing(TAG_FINISH_Y, finishy);
-    else             std::istringstream(map_finishy->GetText()) >> finishy;
+    Utils::parseValueFromXmlNode(mapHandle, TAG_MAP_WIDTH, width, true);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_MAP_HEIGHT, height, true);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_CELLSIZE, cellsize);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_START_X, startx);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_START_Y, starty);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_FINISH_X, finishx);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_FINISH_Y, finishy);
 
     TiXmlHandle gridHandle = mapHandle.FirstChild( TAG_GRID );
     if(!gridHandle.ToElement()) throw MissingTagError( TAG_GRID );
