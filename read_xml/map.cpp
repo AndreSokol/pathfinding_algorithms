@@ -62,37 +62,14 @@ void Map::GetMapFromXML(TiXmlHandle rootHandle) {
 TiXmlElement* Map::DumpToXmlElement() {
     TiXmlElement* mapContainer = new TiXmlElement( TAG_MAP_CONTAINER );
 
-    TiXmlElement* mapDesc = new TiXmlElement( TAG_DESC );
-    mapDesc->LinkEndChild(new TiXmlText(mapDescription));
-    mapContainer->LinkEndChild(mapDesc);
-
-    TiXmlElement* widthEl = new TiXmlElement( TAG_MAP_WIDTH );
-    widthEl->LinkEndChild(new TiXmlText( Utils::toString(width) ));
-    mapContainer->LinkEndChild(widthEl);
-
-    TiXmlElement* heightEl = new TiXmlElement( TAG_MAP_HEIGHT );
-    heightEl->LinkEndChild(new TiXmlText( Utils::toString(height) ));
-    mapContainer->LinkEndChild(heightEl);
-
-    TiXmlElement* cellsizeEl = new TiXmlElement( TAG_CELLSIZE );
-    cellsizeEl->LinkEndChild(new TiXmlText( Utils::toString(cellsize) ));
-    mapContainer->LinkEndChild(cellsizeEl);
-
-    TiXmlElement* startxEl = new TiXmlElement( TAG_START_X );
-    startxEl->LinkEndChild(new TiXmlText( Utils::toString(startx) ));
-    mapContainer->LinkEndChild(startxEl);
-
-    TiXmlElement* startyEl = new TiXmlElement( TAG_START_Y );
-    startyEl->LinkEndChild(new TiXmlText( Utils::toString(starty) ));
-    mapContainer->LinkEndChild(startyEl);
-
-    TiXmlElement* finishxEl = new TiXmlElement( TAG_FINISH_X );
-    finishxEl->LinkEndChild(new TiXmlText( Utils::toString(finishx) ));
-    mapContainer->LinkEndChild(finishxEl);
-
-    TiXmlElement* finishyEl = new TiXmlElement( TAG_FINISH_Y );
-    finishyEl->LinkEndChild(new TiXmlText( Utils::toString(finishy) ));
-    mapContainer->LinkEndChild(finishyEl);
+    mapContainer->LinkEndChild(Utils::dumpValueToXmlNode(mapDescription, TAG_DESC ));
+    mapContainer->LinkEndChild(Utils::dumpValueToXmlNode(width, TAG_MAP_WIDTH));
+    mapContainer->LinkEndChild(Utils::dumpValueToXmlNode(height, TAG_MAP_HEIGHT));
+    mapContainer->LinkEndChild(Utils::dumpValueToXmlNode(cellsize, TAG_CELLSIZE));
+    mapContainer->LinkEndChild(Utils::dumpValueToXmlNode(startx, TAG_START_X));
+    mapContainer->LinkEndChild(Utils::dumpValueToXmlNode(starty, TAG_START_Y));
+    mapContainer->LinkEndChild(Utils::dumpValueToXmlNode(finishx, TAG_FINISH_X));
+    mapContainer->LinkEndChild(Utils::dumpValueToXmlNode(finishy, TAG_FINISH_Y));
 
     TiXmlElement* gridEl = new TiXmlElement( TAG_GRID );
     for (int i = 0; i < height; i++) {

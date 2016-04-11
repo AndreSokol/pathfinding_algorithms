@@ -163,33 +163,14 @@ int MapAnalyzer::GetObstacleCount() {
 TiXmlElement* MapAnalyzer::DumpToXmlElement() {
     TiXmlElement* root = new TiXmlElement( TAG_ANALYSIS_CONTAINER );
 
-    TiXmlElement* obstacleCountEl = new TiXmlElement( TAG_ANALYSIS_OBSTACLE_COUNT );
-    obstacleCountEl->LinkEndChild(new TiXmlText(Utils::toString(obstacleCount)));
-    root->LinkEndChild(obstacleCountEl);
+    root->LinkEndChild(Utils::dumpValueToXmlNode(obstacleCount, TAG_ANALYSIS_OBSTACLE_COUNT));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(occupationDensity, TAG_ANALYSIS_OCCUPATION_DENSITY));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(occupiedArea, TAG_ANALYSIS_TOTAL_OBSTACLE_AREA));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(overallObstaclesPerimeter, TAG_ANALYSIS_TOTAL_OBSTACLE_PERIMETER));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(averageObstacleArea, TAG_ANALYSIS_AVERAGE_OBSTACLE_AREA));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(averageObstaclePerimeter, TAG_ANALYSIS_AVERAGE_OBSTACLE_PERIMETER));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesAreaDispersion, TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION));
 
-    TiXmlElement* densityEl = new TiXmlElement( TAG_ANALYSIS_OCCUPATION_DENSITY );
-    densityEl->LinkEndChild(new TiXmlText(Utils::toString(occupationDensity)));
-    root->LinkEndChild(densityEl);
-
-    TiXmlElement* totalAreaEl = new TiXmlElement( TAG_ANALYSIS_TOTAL_OBSTACLE_AREA );
-    totalAreaEl->LinkEndChild(new TiXmlText(Utils::toString(occupiedArea)));
-    root->LinkEndChild(totalAreaEl);
-
-    TiXmlElement* totalPerimeterEl = new TiXmlElement( TAG_ANALYSIS_TOTAL_OBSTACLE_PERIMETER );
-    totalPerimeterEl->LinkEndChild(new TiXmlText(Utils::toString(overallObstaclesPerimeter)));
-    root->LinkEndChild(totalPerimeterEl);
-
-    TiXmlElement* averageAreaEl = new TiXmlElement( TAG_ANALYSIS_AVERAGE_OBSTACLE_AREA );
-    averageAreaEl->LinkEndChild(new TiXmlText(Utils::toString(averageObstacleArea)));
-    root->LinkEndChild(averageAreaEl);
-
-    TiXmlElement* averagePerimeterEl = new TiXmlElement( TAG_ANALYSIS_AVERAGE_OBSTACLE_PERIMETER );
-    averagePerimeterEl->LinkEndChild(new TiXmlText(Utils::toString(averageObstaclePerimeter)));
-    root->LinkEndChild(averagePerimeterEl);
-
-    TiXmlElement* areaDispersionEl = new TiXmlElement( TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION );
-    areaDispersionEl->LinkEndChild(new TiXmlText(Utils::toString(obstaclesAreaDispersion)));
-    root->LinkEndChild(areaDispersionEl);
 
     /*TiXmlElement* perimeterDispersionEl = new TiXmlElement( TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION );
     perimeterDispersionEl->LinkEndChild(new TiXmlText(Utils::toString(obstaclesPerimeterDispersion)));

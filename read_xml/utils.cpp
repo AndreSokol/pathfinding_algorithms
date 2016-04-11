@@ -28,6 +28,12 @@ void parseValueFromXmlNode(const TiXmlHandle & rootHandle, const char * tagName,
     }
 }
 
+template <typename Type>
+TiXmlElement* dumpValueToXmlNode(const Type & value, const char * tagName) {
+    TiXmlElement * node = new TiXmlElement( tagName );
+    node->LinkEndChild(new TiXmlText( toString(value) ));
+    return node;
+}
 
 template <typename Type>
 std::string toString(const Type& element) {

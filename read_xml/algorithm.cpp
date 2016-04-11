@@ -18,37 +18,14 @@ bool Algorithm::GetDataFromXml(TiXmlHandle rootHandle) {
     TiXmlHandle algoHandle = rootHandle.FirstChild( TAG_ALGO_CONTAINER );
     if(!algoHandle.ToElement()) throw MissingTagError( TAG_ALGO_CONTAINER );
 
-    TiXmlElement * algoType = algoHandle.FirstChild( TAG_ALGO_TYPE ).ToElement();
-    if(algoType) this->searchType = algoType->GetText();
-    else         Utils::ReportTagMissing( TAG_ALGO_TYPE , this->searchType);
-
-    TiXmlElement * algoMetric = algoHandle.FirstChild( TAG_ALGO_METRIC ).ToElement();
-    if(algoMetric) this->metricType = algoMetric->GetText();
-    else           Utils::ReportTagMissing( TAG_ALGO_METRIC , this->metricType);
-
-    TiXmlElement * algoHweight = algoHandle.FirstChild( TAG_ALGO_HWEIGHT ).ToElement();
-    if(algoHweight) std::istringstream(algoHweight->GetText()) >> this->hWeight;
-    else            Utils::ReportTagMissing( TAG_ALGO_HWEIGHT , this->hWeight);
-
-    TiXmlElement * algoTieBreak = algoHandle.FirstChild( TAG_ALGO_TIE_BRAKE ).ToElement();
-    if(algoTieBreak) this->breakingTies = algoTieBreak->GetText();
-    else             Utils::ReportTagMissing( TAG_ALGO_TIE_BRAKE , this->breakingTies);
-
-    TiXmlElement * algoLineCost = algoHandle.FirstChild( TAG_ALGO_LINE_COST ).ToElement();
-    if(algoLineCost) std::istringstream(algoLineCost->GetText()) >> this->lineCost;
-    else             Utils::ReportTagMissing( TAG_ALGO_LINE_COST , this->lineCost);
-
-    TiXmlElement * algoDiagCost = algoHandle.FirstChild( TAG_ALGO_DIAG_COST ).ToElement();
-    if(algoDiagCost) std::istringstream(algoDiagCost->GetText()) >> this->diagonalCost;
-    else             Utils::ReportTagMissing( TAG_ALGO_DIAG_COST , this->diagonalCost);
-
-    TiXmlElement * algoAllowDiag = algoHandle.FirstChild( TAG_ALGO_ALLOW_DIAG ).ToElement();
-    if(algoAllowDiag) std::istringstream(algoAllowDiag->GetText()) >> this->allowDiagonal;
-    else              Utils::ReportTagMissing( TAG_ALGO_ALLOW_DIAG , this->allowDiagonal);
-
-    TiXmlElement * algoAllowSqueeze = algoHandle.FirstChild( TAG_ALGO_ALLOW_SQUEEZE ).ToElement();
-    if(algoAllowSqueeze) std::istringstream(algoAllowSqueeze->GetText()) >> this->allowSqueeze;
-    else                 Utils::ReportTagMissing( TAG_ALGO_ALLOW_SQUEEZE , this->allowSqueeze);
+    Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_TYPE , searchType);
+    Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_METRIC , metricType);
+    Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_HWEIGHT , hWeight);
+    Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_TIE_BRAKE , breakingTies);
+    Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_LINE_COST, lineCost);
+    Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_DIAG_COST, diagonalCost);
+    Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_ALLOW_DIAG , allowDiagonal);
+    Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_ALLOW_SQUEEZE , allowSqueeze);
 
     return true;
 }
