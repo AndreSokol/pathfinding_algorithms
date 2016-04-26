@@ -28,15 +28,8 @@ int main(int argc, char *argv[])
 
     new_map.AnalyzeMap();
     std::cout << new_map;
+    //std::cout << "kek" << std::endl;
     new_map.DumpToFile();
 
     return 0;
 }
-
-/*
- * TO-DO list
- *
- * - apply DRY to DumpToXml and GetFromXml functions
- * - implement extended log with process statuses
- *
- */

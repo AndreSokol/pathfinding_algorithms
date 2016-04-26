@@ -73,14 +73,13 @@ TiXmlElement* Map::DumpToXmlElement() {
 
     TiXmlElement* gridEl = new TiXmlElement( TAG_GRID );
     for (int i = 0; i < height; i++) {
-        TiXmlElement* rowEl = new TiXmlElement( TAG_GRID_ROW );
-        rowEl->SetDoubleAttribute( OUTPUT_LINE_NUMBER_ATTR , i + 1);
-
         std::stringstream rowStream;
         for(int j = 0; j < width; j++) {
             rowStream << grid[i][j] << OUTPUT_MAP_SEPARATOR;
         }
-        rowEl->LinkEndChild(new TiXmlText(rowStream.str()));
+
+        TiXmlElement* rowEl = Utils::dumpValueToXmlNode( rowStream.str(), TAG_GRID_ROW );
+        rowEl->SetDoubleAttribute( OUTPUT_LINE_NUMBER_ATTR , i + 1);
         gridEl->LinkEndChild(rowEl);
     }
     mapContainer->LinkEndChild(gridEl);

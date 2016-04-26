@@ -69,6 +69,8 @@
 
 #define INPUT_GRID_SEPARATOR      ' '
 
+#define INPUT_FREE_CELL            0
+
 /*
  * Some default values
  */

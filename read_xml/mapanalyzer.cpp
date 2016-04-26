@@ -18,7 +18,7 @@ MapAnalyzer::MapAnalyzer(Map * mapToAnalyze)
 }
 
 MapAnalyzer::~MapAnalyzer() {
-    delete [] obstacles;
+    //delete [] obstacles;
 }
 
 void MapAnalyzer::AnalyzeMap() {
@@ -54,7 +54,7 @@ void MapAnalyzer::FindObstacles()  {
         for(int j = 0; j < map->GetWidth(); ++j) {
             currentCoords = Utils::Coords(i, j);
             if (visited.find(currentCoords) == visited.end() &&
-                    map->At(currentCoords) != 0) {
+                    map->At(currentCoords) != INPUT_FREE_CELL) {
                 BreadthFirstSearch(visited, currentCoords, obstacleCoord);
                 std::sort(obstacleCoord.begin(), obstacleCoord.end());
 
@@ -91,7 +91,7 @@ void MapAnalyzer::BreadthFirstSearch(std::set<Utils::Coords> & visited,
 
         for(int i = 0; i < 4; i++) {
             Utils::Coords coordsToCheck = currentCoords + Utils::NEIGHBOURS_NO_DIAG[i];
-            if (map->At(coordsToCheck) != 0 &&
+            if (map->At(coordsToCheck) != INPUT_FREE_CELL &&
                 map->At(coordsToCheck) != ELEMENT_OUT_OF_GRID ) {
                 if(visited.count(coordsToCheck) == 0) {
                     queue.push(coordsToCheck);
@@ -115,10 +115,10 @@ void MapAnalyzer::CalculateOverallPerimeter()  {
     for (int i = 0; i < map->GetHeight(); i++) {
         for (int j = 0; j < map->GetWidth(); j++) {
             if (map->At(i, j) == 1) {
-                if (map->At(i - 1, j) == 0) answer++;
-                if (map->At(i + 1, j) == 0) answer++;
-                if (map->At(i, j - 1) == 0) answer++;
-                if (map->At(i, j + 1) == 0) answer++;
+                if (map->At(i - 1, j) == INPUT_FREE_CELL) answer++;
+                if (map->At(i + 1, j) == INPUT_FREE_CELL) answer++;
+                if (map->At(i, j - 1) == INPUT_FREE_CELL) answer++;
+                if (map->At(i, j + 1) == INPUT_FREE_CELL) answer++;
             }
         }
     }

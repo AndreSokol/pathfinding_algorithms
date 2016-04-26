@@ -40,20 +40,20 @@ void XMLObject::AnalyzeMap() {
 }
 
 void XMLObject::DumpToFile() {
-    std::string fPath = "output.xml";
+    std::string fPath = "./output.xml";
 
     TiXmlDocument doc;
     TiXmlElement* rootElement = new TiXmlElement( TAG_ROOT );
 
-    rootElement->LinkEndChild(map->DumpToXmlElement());
-    rootElement->LinkEndChild(algorithm->DumpToXmlElement());
-    rootElement->LinkEndChild(options->DumpToXmlElement());
+    rootElement->LinkEndChild( map->DumpToXmlElement() );
+    rootElement->LinkEndChild( algorithm->DumpToXmlElement() );
+    rootElement->LinkEndChild( options->DumpToXmlElement() );
 
     if (analyser != NULL) // RAISE WARNING, TO BE IMPLEMENTED
-        rootElement->LinkEndChild(analyser->DumpToXmlElement());
+        rootElement->LinkEndChild( analyser->DumpToXmlElement() );
 
     doc.LinkEndChild(rootElement);
-    doc.SaveFile(fPath);
+    doc.SaveFile( fPath );
 }
 
 

@@ -43,37 +43,14 @@ std::ostream& operator<< (std::ostream &os, const Algorithm& algo) {
 TiXmlElement* Algorithm::DumpToXmlElement() {
     TiXmlElement* root = new TiXmlElement( TAG_ALGO_CONTAINER );
 
-    TiXmlElement* searchTypeEl = new TiXmlElement( TAG_ALGO_TYPE );
-    searchTypeEl->LinkEndChild(new TiXmlText(this->searchType));
-    root->LinkEndChild(searchTypeEl);
-
-    TiXmlElement* metricTypeEl = new TiXmlElement( TAG_ALGO_METRIC );
-    metricTypeEl->LinkEndChild(new TiXmlText(this->metricType));
-    root->LinkEndChild(metricTypeEl);
-
-    TiXmlElement* hweightEl = new TiXmlElement( TAG_ALGO_HWEIGHT );
-    hweightEl->LinkEndChild(new TiXmlText( Utils::toString(this->hWeight) ));
-    root->LinkEndChild(hweightEl);
-
-    TiXmlElement* breakingTiesEl = new TiXmlElement( TAG_ALGO_TIE_BRAKE );
-    breakingTiesEl->LinkEndChild(new TiXmlText(this->breakingTies));
-    root->LinkEndChild(breakingTiesEl);
-
-    TiXmlElement* lineCostEl = new TiXmlElement( TAG_ALGO_LINE_COST );
-    lineCostEl->LinkEndChild(new TiXmlText( Utils::toString(this->lineCost) ));
-    root->LinkEndChild(lineCostEl);
-
-    TiXmlElement* diagonalCostEl = new TiXmlElement( TAG_ALGO_DIAG_COST );
-    diagonalCostEl->LinkEndChild(new TiXmlText( Utils::toString(this->diagonalCost) ));
-    root->LinkEndChild(diagonalCostEl);
-
-    TiXmlElement* allowDiagonalEl = new TiXmlElement( TAG_ALGO_ALLOW_DIAG );
-    allowDiagonalEl->LinkEndChild(new TiXmlText( Utils::toString(this->allowDiagonal) ));
-    root->LinkEndChild(allowDiagonalEl);
-
-    TiXmlElement* allowSqueezeEl = new TiXmlElement( TAG_ALGO_ALLOW_SQUEEZE );
-    allowSqueezeEl->LinkEndChild(new TiXmlText( Utils::toString(this->allowSqueeze) ));
-    root->LinkEndChild(allowSqueezeEl);
+    root->LinkEndChild(Utils::dumpValueToXmlNode(searchType, TAG_ALGO_TYPE));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(metricType, TAG_ALGO_METRIC));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(hWeight, TAG_ALGO_HWEIGHT));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(breakingTies, TAG_ALGO_TIE_BRAKE));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(lineCost, TAG_ALGO_LINE_COST));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(diagonalCost, TAG_ALGO_DIAG_COST));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(allowDiagonal, TAG_ALGO_ALLOW_DIAG));
+    root->LinkEndChild(Utils::dumpValueToXmlNode(allowSqueeze, TAG_ALGO_ALLOW_SQUEEZE));
 
     return root;
 }
