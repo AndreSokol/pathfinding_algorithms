@@ -1,4 +1,5 @@
 #include "map.h"
+#include "utils.h"
 #include "gl_settings.h"
 
 Map::Map(TiXmlHandle rootHandle) {
@@ -74,6 +75,7 @@ TiXmlElement* Map::DumpToXmlElement() {
     TiXmlElement* gridEl = new TiXmlElement( TAG_GRID );
     for (int i = 0; i < height; i++) {
         std::stringstream rowStream;
+
         for(int j = 0; j < width; j++) {
             rowStream << grid[i][j] << OUTPUT_MAP_SEPARATOR;
         }

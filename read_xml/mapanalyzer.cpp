@@ -112,16 +112,8 @@ void MapAnalyzer::CalculateAverageArea()  {
 
 void MapAnalyzer::CalculateOverallPerimeter()  {
     int answer = 0;
-    for (int i = 0; i < map->GetHeight(); i++) {
-        for (int j = 0; j < map->GetWidth(); j++) {
-            if (map->At(i, j) == 1) {
-                if (map->At(i - 1, j) == INPUT_FREE_CELL) answer++;
-                if (map->At(i + 1, j) == INPUT_FREE_CELL) answer++;
-                if (map->At(i, j - 1) == INPUT_FREE_CELL) answer++;
-                if (map->At(i, j + 1) == INPUT_FREE_CELL) answer++;
-            }
-        }
-    }
+    for(int i = 0; i < obstacleCount; i++)
+        answer += obstacles[i].perimeter();
     overallObstaclesPerimeter = answer;
 }
 
@@ -170,7 +162,6 @@ TiXmlElement* MapAnalyzer::DumpToXmlElement() {
     root->LinkEndChild(Utils::dumpValueToXmlNode(averageObstacleArea, TAG_ANALYSIS_AVERAGE_OBSTACLE_AREA));
     root->LinkEndChild(Utils::dumpValueToXmlNode(averageObstaclePerimeter, TAG_ANALYSIS_AVERAGE_OBSTACLE_PERIMETER));
     root->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesAreaDispersion, TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION));
-
 
     /*TiXmlElement* perimeterDispersionEl = new TiXmlElement( TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION );
     perimeterDispersionEl->LinkEndChild(new TiXmlText(Utils::toString(obstaclesPerimeterDispersion)));

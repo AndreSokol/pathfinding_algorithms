@@ -21,7 +21,7 @@ private:
     int _perimeter;
     int _area;
 
-    int calculatePerimeter();
+    void calculatePerimeter();
     void calculateArea();
 };
 

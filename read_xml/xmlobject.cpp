@@ -40,7 +40,7 @@ void XMLObject::AnalyzeMap() {
 }
 
 void XMLObject::DumpToFile() {
-    std::string fPath = "./output.xml";
+    std::string fPath = "output.xml";
 
     TiXmlDocument doc;
     TiXmlElement* rootElement = new TiXmlElement( TAG_ROOT );

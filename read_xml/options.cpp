@@ -18,9 +18,7 @@ TiXmlElement* Options::DumpToXmlElement()
 {
     TiXmlElement* root = new TiXmlElement( TAG_OPTIONS_CONTAINER );
 
-    TiXmlElement* logLevelEl = new TiXmlElement( TAG_OPTIONS_LOG_LEVEL );
-    logLevelEl->LinkEndChild(new TiXmlText(Utils::toString(logLevel)));
-    root->LinkEndChild(logLevelEl);
+    root->LinkEndChild(Utils::dumpValueToXmlNode(logLevel, TAG_OPTIONS_LOG_LEVEL ));
 
     return root;
 }

@@ -6,7 +6,8 @@
  */
 
 #include <iostream>
-#include  "../tinyxml/tinyxml.h"
+#include "../tinyxml/tinyxml.h"
+#include "../tinyxml/tinystr.h"
 #include <string>
 #include <sstream>
 #include <vector>
@@ -94,6 +95,7 @@
 
 #define OUTPUT_LINE_NUMBER_ATTR "number"
 #define OUTPUT_MAP_SEPARATOR    " "
+
 /*
 int LOG_LEVEL = 1;
 std::string LOG_PATH;

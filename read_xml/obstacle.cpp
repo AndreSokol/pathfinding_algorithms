@@ -39,7 +39,7 @@ Obstacle::Obstacle(const std::vector<Utils::Coords> & v)
     Utils::reallocateVector(compressedV);
 
     calculateArea();
-    _perimeter = calculatePerimeter();
+    calculatePerimeter();
 }
 
 Obstacle::~Obstacle() {
@@ -76,9 +76,55 @@ void Obstacle::calculateArea() {
     _area = ans;
 }
 
-int Obstacle::calculatePerimeter() {
+void Obstacle::calculatePerimeter() {
+    std::set<int> previous_line;
+    std::set<int> current_line;
+    int perimeter = 0;
+
+    int current_line_num = _rows[0].x;
+    Utils::ObstacleRow current_row;
+
+    for (int i = 0; i < _rowsCount; i++) {
+        current_row = _rows[i];
+
+        if(current_row.x != current_line_num) {
+            // if we get to the end of the line, we need to check for adjacent cells
+
+            std::set<int>::iterator it = current_line.begin();
+            for(; it != current_line.end(); it++) {
+                if(previous_line.find(*it) != previous_line.end()) {
+                    // if element is found in previous line we've got 2 adjacent cells
+                    // and 1 edge of each is not outer
+                    perimeter -= 2;
+                }
+            }
+            previous_line = current_line;
+            current_line.clear();
+            current_line_num++;
+        }
+
+        // Adding row to the current line
+        perimeter += 2; // small sides of the row
+        perimeter += (current_row.y2 - current_row.y1 + 1) * 2; // big sides of the row
+        for (int j = current_row.y1; j <= current_row.y2; j++) {
+            current_line.insert(j); // adding cells to current_line set
+        }
+
+    }
+
+    // checking adjacents for last line
+    std::set<int>::iterator it = current_line.begin();
+    for(; it != current_line.end(); it++) {
+        if(previous_line.find(*it) != previous_line.end()) {
+            // if element is found in previous line we've got 2 adjacent cells
+            // and 1 edge of each is not outer
+            perimeter -= 2;
+        }
+    }
+
+    _perimeter = perimeter;
+
     /*
-     * TO BE IMPLEMENTED
+     * delete sets here
      */
-    return 0;
 }

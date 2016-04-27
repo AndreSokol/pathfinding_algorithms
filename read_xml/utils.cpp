@@ -37,7 +37,7 @@ TiXmlElement* dumpValueToXmlNode(const Type & value, const char * tagName) {
 
 template <typename Type>
 std::string toString(const Type& element) {
-    std::stringstream sstream;
+    std::ostringstream sstream;
     sstream << element;
     return sstream.str();
 }
