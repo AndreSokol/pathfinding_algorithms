@@ -22,7 +22,7 @@ private:
     void CalculateAverageArea();
     void CalculateAveragePerimeter();
     void CalculateAreaDispersion();
-    double CalculatePerimeterDispersion();
+    void CalculatePerimeterDispersion();
 
     void BreadthFirstSearch(std::set<Utils::Coords> &, Utils::Coords, std::vector<Utils::Coords> &);
 

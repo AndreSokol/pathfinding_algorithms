@@ -29,6 +29,7 @@ void MapAnalyzer::AnalyzeMap() {
     CalculateAverageArea();
     CalculateAveragePerimeter();
     CalculateAreaDispersion();
+    CalculatePerimeterDispersion();
 }
 
 void MapAnalyzer::CalculateOccupiedArea() {
@@ -122,17 +123,25 @@ void MapAnalyzer::CalculateAveragePerimeter()  {
 }
 
 void MapAnalyzer::CalculateAreaDispersion()  {
-    if (this->obstacleCount < 2) return;
+    if (obstacleCount < 2) return;
+
     double ans = 0.0;
-    for (int i = 0; i < this->obstacleCount; i++) {
-        ans += (this->obstacles[i].area() - this->averageObstacleArea) * (this->obstacles[i].area() - this->averageObstacleArea);
+    for (int i = 0; i < obstacleCount; i++) {
+        ans += (obstacles[i].area() - averageObstacleArea) *
+                     (obstacles[i].area() - averageObstacleArea);
     }
-    this->obstaclesAreaDispersion = ans / double(this->obstacleCount - 1);
+    obstaclesAreaDispersion = ans / double(obstacleCount - 1);
 }
 
-double MapAnalyzer::CalculatePerimeterDispersion()  {
-    // TO BE IMPLEMENTED
-    return 0;
+void MapAnalyzer::CalculatePerimeterDispersion()  {
+    if (obstacleCount < 2) return;
+
+    double ans = 0.0;
+    for (int i = 0; i < obstacleCount; i++) {
+        ans += (obstacles[i].perimeter() - averageObstaclePerimeter) *
+                         (obstacles[i].perimeter() - averageObstaclePerimeter);
+    }
+    obstaclesPerimeterDispersion = ans / double(obstacleCount - 1);
 }
 
 std::ostream& operator<< (std::ostream & os, const MapAnalyzer & a) {
@@ -144,6 +153,7 @@ std::ostream& operator<< (std::ostream & os, const MapAnalyzer & a) {
     os << "Area dispersion " << a.obstaclesAreaDispersion << std::endl;
     os << "Overall perimeter " << a.overallObstaclesPerimeter << std::endl;
     os << "Average perimeter " << a.averageObstaclePerimeter << std::endl;
+    os << "Perimeter dispersion " << a.obstaclesPerimeterDispersion << std::endl;
 
     return os;
 }
@@ -162,10 +172,7 @@ TiXmlElement* MapAnalyzer::DumpToXmlElement() {
     root->LinkEndChild(Utils::dumpValueToXmlNode(averageObstacleArea, TAG_ANALYSIS_AVERAGE_OBSTACLE_AREA));
     root->LinkEndChild(Utils::dumpValueToXmlNode(averageObstaclePerimeter, TAG_ANALYSIS_AVERAGE_OBSTACLE_PERIMETER));
     root->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesAreaDispersion, TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION));
-
-    /*TiXmlElement* perimeterDispersionEl = new TiXmlElement( TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION );
-    perimeterDispersionEl->LinkEndChild(new TiXmlText(Utils::toString(obstaclesPerimeterDispersion)));
-    root->LinkEndChild(perimeterDispersionEl);*/
+    root->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesPerimeterDispersion, TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION));
 
     return root;
 }
