@@ -5,7 +5,7 @@
 
 class Algorithm {
 public:
-    Algorithm(TiXmlHandle);
+    Algorithm(TiXmlHandle, Logger*);
     ~Algorithm();
 
     friend std::ostream& operator<< (std::ostream &, const Algorithm &);
@@ -20,6 +20,7 @@ private:
     double diagonalCost;
     bool allowDiagonal;
     bool allowSqueeze;
+    Logger *logger;
 
     bool GetDataFromXml(TiXmlHandle);
 };

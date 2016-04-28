@@ -2,14 +2,25 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2) {
-        std::cerr << "Usage: .exe <filePath>" << std::endl;
+    if (argc != 2 && argc != 4) {
+        std::cerr << "Usage: .exe <filePath> [-l <logPath>]" << std::endl;
         return 0;
     }
+
     XMLObject new_map;
 
-    /*LOG_FILE_NAME = argv[1] + "_log.txt";
-    LOG_PATH = 1;*/
+    if (argc == 4) {
+        if (argv[2] != std::string("-l")) {
+            std::cerr << "Usage: .exe <filePath> [-l <logPath>]" << std::endl;
+            return 0;
+        }
+
+        new_map.SetLogPath(argv[3]);
+    }
+    else {
+        new_map.logger << "[WARNING] No logs location specified; logs will be saved to default loaction 'logs.txt'" << std::endl;
+        new_map.SetLogPath("logs.txt");
+    }
 
     try {
         new_map.LoadFromFile(argv[1]);
@@ -27,7 +38,7 @@ int main(int argc, char *argv[])
     }
 
     new_map.AnalyzeMap();
-    std::cout << new_map;
+    //std::cout << new_map;
     new_map.DumpToFile();
 
     return 0;

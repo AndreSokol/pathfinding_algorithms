@@ -9,11 +9,16 @@ public:
     XMLObject();
     ~XMLObject();
 
+    void SetLogPath(const char *);
     void LoadFromFile(const char *);
     void AnalyzeMap();
 
     friend std::ostream& operator<< (std::ostream &, const XMLObject &);
     void DumpToFile();
+
+    void LogMessage(std::string);
+
+    Logger logger;
 private:
     Map *map;
     Algorithm *algorithm;

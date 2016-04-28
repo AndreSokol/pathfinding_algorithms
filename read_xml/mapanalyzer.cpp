@@ -1,7 +1,7 @@
 #include "mapanalyzer.h"
 #include "gl_settings.h"
 
-MapAnalyzer::MapAnalyzer(Map * mapToAnalyze)
+MapAnalyzer::MapAnalyzer(Map * mapToAnalyze, Logger * logger)
 {
     occupiedArea = 0;
     occupationDensity = 0.0;
@@ -13,6 +13,7 @@ MapAnalyzer::MapAnalyzer(Map * mapToAnalyze)
     obstacles = NULL;
     obstacleCount = 0;
     map = mapToAnalyze;
+    this->logger = logger;
 
     AnalyzeMap();
 }
@@ -33,18 +34,26 @@ void MapAnalyzer::AnalyzeMap() {
 }
 
 void MapAnalyzer::CalculateOccupiedArea() {
+    *logger << "[INFO] Calculating area...";
+
     int answer = 0;
     for(int i = 0; i < obstacleCount; i++) {
         answer += obstacles[i].area();
     }
     occupiedArea = answer;
+
+    *logger << " result is " << occupiedArea << "!" << std::endl;
 }
 
 void MapAnalyzer::CalculateDensity()  {
+    *logger << "[INFO] Calculating density...";
     occupationDensity = double(occupiedArea) / double(map->GetMapArea());
+    *logger << " result is " << occupationDensity << "!" << std::endl;
 }
 
 void MapAnalyzer::FindObstacles()  {
+    *logger << "[INFO] Searching obstacles...";
+
     std::set<Utils::Coords> visited;
 
     std::vector<Utils::Coords> obstacleCoord;
@@ -76,6 +85,9 @@ void MapAnalyzer::FindObstacles()  {
 
     Utils::reallocateVector(obstacleCoord);
     Utils::reallocateVector(obstacleCompressed);
+
+
+    *logger << " " << obstacleCount << " found!" << std::endl;
 }
 
 void MapAnalyzer::BreadthFirstSearch(std::set<Utils::Coords> & visited,
@@ -108,40 +120,51 @@ void MapAnalyzer::BreadthFirstSearch(std::set<Utils::Coords> & visited,
 }
 
 void MapAnalyzer::CalculateAverageArea()  {
+    *logger << "[INFO] Calculating average obstacles area...";
     averageObstacleArea = double(occupiedArea) / double(obstacleCount);
+    *logger << " result is " << averageObstacleArea << "!" << std::endl;
 }
 
 void MapAnalyzer::CalculateOverallPerimeter()  {
+    *logger << "[INFO] Calculating overall perimeter...";
     int answer = 0;
     for(int i = 0; i < obstacleCount; i++)
         answer += obstacles[i].perimeter();
     overallObstaclesPerimeter = answer;
+    *logger << " result is " << overallObstaclesPerimeter << "!" << std::endl;
 }
 
 void MapAnalyzer::CalculateAveragePerimeter()  {
+    *logger << "[INFO] Calculating average obstacle perimeter...";
     averageObstaclePerimeter = double(overallObstaclesPerimeter) / double(obstacleCount);
+    *logger << " result is " << averageObstaclePerimeter << "!" << std::endl;
 }
 
 void MapAnalyzer::CalculateAreaDispersion()  {
-    if (obstacleCount < 2) return;
-
-    double ans = 0.0;
-    for (int i = 0; i < obstacleCount; i++) {
-        ans += (obstacles[i].area() - averageObstacleArea) *
+    *logger << "[INFO] Calculating obstacle area dispersion...";
+    if (obstacleCount >= 2) {
+        double ans = 0.0;
+        for (int i = 0; i < obstacleCount; i++) {
+            ans += (obstacles[i].area() - averageObstacleArea) *
                      (obstacles[i].area() - averageObstacleArea);
+        }
+
+        obstaclesAreaDispersion = ans / double(obstacleCount - 1);
     }
-    obstaclesAreaDispersion = ans / double(obstacleCount - 1);
+    *logger << " result is " << obstaclesAreaDispersion << "!" << std::endl;
 }
 
 void MapAnalyzer::CalculatePerimeterDispersion()  {
-    if (obstacleCount < 2) return;
-
-    double ans = 0.0;
-    for (int i = 0; i < obstacleCount; i++) {
-        ans += (obstacles[i].perimeter() - averageObstaclePerimeter) *
-                         (obstacles[i].perimeter() - averageObstaclePerimeter);
+    *logger << "[INFO] Calculating obstacle perimeter dispersion...";
+    if (obstacleCount >= 2) {
+        double ans = 0.0;
+        for (int i = 0; i < obstacleCount; i++) {
+            ans += (obstacles[i].perimeter() - averageObstaclePerimeter) *
+                             (obstacles[i].perimeter() - averageObstaclePerimeter);
+        }
+        obstaclesPerimeterDispersion = ans / double(obstacleCount - 1);
     }
-    obstaclesPerimeterDispersion = ans / double(obstacleCount - 1);
+    *logger << " result is " << obstaclesPerimeterDispersion << "!" << std::endl;
 }
 
 std::ostream& operator<< (std::ostream & os, const MapAnalyzer & a) {
@@ -163,6 +186,7 @@ int MapAnalyzer::GetObstacleCount() {
 }
 
 TiXmlElement* MapAnalyzer::DumpToXmlElement() {
+    *logger << "[INFO] Dumping analysis results to XML..." << std::endl;
     TiXmlElement* root = new TiXmlElement( TAG_ANALYSIS_CONTAINER );
 
     root->LinkEndChild(Utils::dumpValueToXmlNode(obstacleCount, TAG_ANALYSIS_OBSTACLE_COUNT));
@@ -174,5 +198,6 @@ TiXmlElement* MapAnalyzer::DumpToXmlElement() {
     root->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesAreaDispersion, TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION));
     root->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesPerimeterDispersion, TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION));
 
+    *logger << "[INFO] Dumping analysis results to XML done!" << std::endl;
     return root;
 }

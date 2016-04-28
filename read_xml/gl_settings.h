@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <queue>
 #include <set>
+#include <fstream>
 
 #endif
 
@@ -21,6 +22,7 @@
 #ifndef PROJECT_FILES
 #define PROJECT_FILES
 
+#include "logger.cpp"
 #include "errors.cpp"
 #include "utils.cpp"
 #include "obstacle.cpp"

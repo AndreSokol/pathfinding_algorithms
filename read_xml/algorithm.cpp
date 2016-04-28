@@ -1,7 +1,7 @@
 #include "algorithm.h"
 #include "gl_settings.h"
 
-Algorithm::Algorithm(TiXmlHandle rootHandle) {
+Algorithm::Algorithm(TiXmlHandle rootHandle, Logger* logger) {
     searchType = "astar";
     metricType = "euclid";
     hWeight = 1.0;
@@ -10,11 +10,13 @@ Algorithm::Algorithm(TiXmlHandle rootHandle) {
     diagonalCost = 1.414;
     allowDiagonal = false;
     allowSqueeze = false;
+    this->logger = logger;
 
     GetDataFromXml(rootHandle);
 }
 
 bool Algorithm::GetDataFromXml(TiXmlHandle rootHandle) {
+    *logger << "[INFO] Reading algorithm settings from XML..." << std::endl;
     TiXmlHandle algoHandle = rootHandle.FirstChild( TAG_ALGO_CONTAINER );
     if(!algoHandle.ToElement()) throw MissingTagError( TAG_ALGO_CONTAINER );
 
@@ -26,6 +28,8 @@ bool Algorithm::GetDataFromXml(TiXmlHandle rootHandle) {
     Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_DIAG_COST, diagonalCost);
     Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_ALLOW_DIAG , allowDiagonal);
     Utils::parseValueFromXmlNode(algoHandle, TAG_ALGO_ALLOW_SQUEEZE , allowSqueeze);
+
+    *logger << "[INFO] Reading algorithm settings done!" << std::endl;
 
     return true;
 }
@@ -41,6 +45,7 @@ std::ostream& operator<< (std::ostream &os, const Algorithm& algo) {
 }
 
 TiXmlElement* Algorithm::DumpToXmlElement() {
+    *logger << "[INFO] Dumping algorithm settings to XML..." << std::endl;
     TiXmlElement* root = new TiXmlElement( TAG_ALGO_CONTAINER );
 
     root->LinkEndChild(Utils::dumpValueToXmlNode(searchType, TAG_ALGO_TYPE));
@@ -51,6 +56,8 @@ TiXmlElement* Algorithm::DumpToXmlElement() {
     root->LinkEndChild(Utils::dumpValueToXmlNode(diagonalCost, TAG_ALGO_DIAG_COST));
     root->LinkEndChild(Utils::dumpValueToXmlNode(allowDiagonal, TAG_ALGO_ALLOW_DIAG));
     root->LinkEndChild(Utils::dumpValueToXmlNode(allowSqueeze, TAG_ALGO_ALLOW_SQUEEZE));
+
+    *logger << "[INFO] Dumping algorithm settings to XML done!" << std::endl;
 
     return root;
 }

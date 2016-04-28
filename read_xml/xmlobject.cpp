@@ -7,6 +7,7 @@ XMLObject::XMLObject()
     options = NULL;
     fPath = "";
     analyser = NULL;
+    //logger = Logger();
 }
 
 XMLObject::~XMLObject()
@@ -17,11 +18,17 @@ XMLObject::~XMLObject()
     delete analyser;
 }
 
+void XMLObject::SetLogPath(const char * logPath) {
+    logger.SetLogPath(logPath);
+}
+
 void XMLObject::LoadFromFile(const char * fPath) {
     this->fPath = fPath;
 
     TiXmlDocument doc;
     doc.LoadFile(fPath);
+
+    logger << "[INFO] Reading file from '" << fPath << "'" << "\n";
 
     if( doc.Error() ) throw ParserError(doc.ErrorDesc(), fPath);
     TiXmlHandle docHandle( &doc );
@@ -30,17 +37,23 @@ void XMLObject::LoadFromFile(const char * fPath) {
     TiXmlHandle rootHandle = docHandle.FirstChild( TAG_ROOT );
     if(!rootHandle.ToElement()) throw MissingTagError( TAG_ROOT );
 
-    map = new Map(rootHandle);
-    options = new Options(rootHandle);
-    algorithm = new Algorithm(rootHandle);
+    map = new Map(rootHandle, &logger);
+    options = new Options(rootHandle, &logger);
+    algorithm = new Algorithm(rootHandle, &logger);
+
+    logger << "[INFO] Reading from file done!" << std::endl;
 }
 
 void XMLObject::AnalyzeMap() {
-    analyser = new MapAnalyzer(map);
+    logger << "[INFO] Analysing map..." << std::endl;
+    analyser = new MapAnalyzer(map, &logger);
+    logger << "[INFO] Analysis done!" << std::endl;
 }
 
 void XMLObject::DumpToFile() {
     std::string fPath = "output.xml";
+
+    logger << "[INFO] Dumping results to XML..." << std::endl;
 
     TiXmlDocument doc;
     TiXmlElement* rootElement = new TiXmlElement( TAG_ROOT );
@@ -54,6 +67,13 @@ void XMLObject::DumpToFile() {
 
     doc.LinkEndChild(rootElement);
     doc.SaveFile( fPath );
+
+    logger << "[INFO] Dumping results to XML done, look at " << fPath << std::endl;
+}
+
+void XMLObject::LogMessage(std::string msg)
+{
+    std::cout << msg << std::endl;
 }
 
 

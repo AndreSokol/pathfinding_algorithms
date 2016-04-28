@@ -6,7 +6,7 @@
 class Map
 {
 public:
-    Map(TiXmlHandle);
+    Map(TiXmlHandle, Logger*);
     ~Map();
 
     TiXmlElement* DumpToXmlElement();
@@ -27,6 +27,7 @@ private:
     int finishx;
     int finishy;
     std::string mapDescription;
+    Logger *logger;
 
     void GetMapFromXML(TiXmlHandle);
 };

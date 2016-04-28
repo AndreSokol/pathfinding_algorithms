@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     options.cpp \
     map.cpp \
     mapanalyzer.cpp \
-    xmlobject.cpp
+    xmlobject.cpp \
+    logger.cpp
 
 HEADERS += \
     ../tinyxml/tinystr.h \
@@ -32,7 +33,8 @@ HEADERS += \
     options.h \
     map.h \
     mapanalyzer.h \
-    xmlobject.h
+    xmlobject.h \
+    logger.h
 
 DISTFILES += \
     Logic/TagNecessity.txt

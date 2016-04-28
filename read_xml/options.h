@@ -5,7 +5,7 @@
 
 class Options {
 public:
-    Options(TiXmlHandle);
+    Options(TiXmlHandle, Logger*);
     ~Options();
 
     TiXmlElement* DumpToXmlElement();
@@ -13,6 +13,7 @@ private:
     int logLevel;
     std::string logPath;
     std::string logFileName;
+    Logger *logger;
 
     bool GetDataFromXml(TiXmlHandle);
 };
