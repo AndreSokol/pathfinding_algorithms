@@ -12,7 +12,7 @@ public:
     friend std::ostream& operator<< (std::ostream &, const MapAnalyzer &);
 
     int GetObstacleCount();
-    TiXmlElement* DumpToXmlElement();
+    TiXmlElement* DumpToXmlElement(int);
 private:
     void AnalyzeMap();
     void FindObstacles();

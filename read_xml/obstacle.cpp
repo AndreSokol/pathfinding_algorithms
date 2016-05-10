@@ -128,3 +128,12 @@ void Obstacle::calculatePerimeter() {
      * delete sets here
      */
 }
+
+TiXmlElement* Obstacle::DumpToXmlElement(int number) {
+    TiXmlElement * root = new TiXmlElement( TAG_ANAlYSIS_OBSTACLE );
+    root->SetAttribute( ATTRIBUTE_OBSTACLE_NUMBER, Utils::toString(number) );
+    root->SetAttribute( ATTRIBUTE_OBSTACLE_PERIMETER, Utils::toString(_perimeter) );
+    root->SetAttribute( ATTRIBUTE_OBSTACLE_AREA, Utils::toString(_area) );
+
+    return root;
+}

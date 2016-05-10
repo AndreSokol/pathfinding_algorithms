@@ -9,6 +9,7 @@ public:
     ~Options();
 
     TiXmlElement* DumpToXmlElement();
+    int getLogLevel();
 private:
     int logLevel;
     std::string logPath;

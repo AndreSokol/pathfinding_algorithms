@@ -15,6 +15,8 @@ public:
     int size();
     int area();
     int perimeter();
+
+    TiXmlElement* DumpToXmlElement(int);
 private:
     Utils::ObstacleRow * _rows;
     int _rowsCount;

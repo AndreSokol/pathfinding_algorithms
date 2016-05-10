@@ -85,7 +85,8 @@
  * Output attributes and params
  */
 
-#define TAG_ANALYSIS_CONTAINER                       "output"
+#define TAG_ANALYSIS_CONTAINER                       "mapstat"
+#define TAG_ANALYSIS_SUMMARY                         "summary"
 #define TAG_ANALYSIS_OCCUPATION_DENSITY              "density"
 #define TAG_ANALYSIS_OBSTACLE_COUNT                  "obstaclecount"
 #define TAG_ANALYSIS_TOTAL_OBSTACLE_AREA             "totalarea"
@@ -94,9 +95,15 @@
 #define TAG_ANALYSIS_AVERAGE_OBSTACLE_PERIMETER      "averageperimeter"
 #define TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION        "areadispersion"
 #define TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION   "perimeterdispersion"
+#define TAG_ANALYSIS_OBSTACLE_CONTAINER              "obstacles"
+#define TAG_ANAlYSIS_OBSTACLE                        "obstacle"
 
-#define OUTPUT_LINE_NUMBER_ATTR "number"
-#define OUTPUT_MAP_SEPARATOR    " "
+#define ATTRIBUTE_OBSTACLE_NUMBER                    "number"
+#define ATTRIBUTE_OBSTACLE_PERIMETER                 "perimeter"
+#define ATTRIBUTE_OBSTACLE_AREA                      "area"
+
+#define OUTPUT_LINE_NUMBER_ATTR         "number"
+#define OUTPUT_MAP_SEPARATOR            " "
 
 /*
 int LOG_LEVEL = 1;

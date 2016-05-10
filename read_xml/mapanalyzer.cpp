@@ -52,7 +52,7 @@ void MapAnalyzer::CalculateDensity()  {
 }
 
 void MapAnalyzer::FindObstacles()  {
-    *logger << "[INFO] Searching obstacles...";
+    *logger << "[INFO] Searching obstacles..." << std::endl;
 
     std::set<Utils::Coords> visited;
 
@@ -71,8 +71,8 @@ void MapAnalyzer::FindObstacles()  {
                 // See Utils::ObstacleRow definition about compressing
                 Obstacle newObstacle = Obstacle(obstacleCoord);
                 obstacleCompressed.push_back(newObstacle);
-
-                obstacleCoord.clear();
+                *logger << "[INFO] " << (i * map->GetWidth() + j) * 100.0 / map->GetMapArea() << "% of map analysed..." << std::endl;
+                Utils::reallocateVector(obstacleCoord);
             }
         }
     }
@@ -87,7 +87,7 @@ void MapAnalyzer::FindObstacles()  {
     Utils::reallocateVector(obstacleCompressed);
 
 
-    *logger << " " << obstacleCount << " found!" << std::endl;
+    *logger << "[INFO] 100% of map analysed: " << obstacleCount << " obstacles found!" << std::endl;
 }
 
 void MapAnalyzer::BreadthFirstSearch(std::set<Utils::Coords> & visited,
@@ -185,18 +185,33 @@ int MapAnalyzer::GetObstacleCount() {
     return obstacleCount;
 }
 
-TiXmlElement* MapAnalyzer::DumpToXmlElement() {
+TiXmlElement* MapAnalyzer::DumpToXmlElement(int logLevel) {
     *logger << "[INFO] Dumping analysis results to XML..." << std::endl;
     TiXmlElement* root = new TiXmlElement( TAG_ANALYSIS_CONTAINER );
 
-    root->LinkEndChild(Utils::dumpValueToXmlNode(obstacleCount, TAG_ANALYSIS_OBSTACLE_COUNT));
-    root->LinkEndChild(Utils::dumpValueToXmlNode(occupationDensity, TAG_ANALYSIS_OCCUPATION_DENSITY));
-    root->LinkEndChild(Utils::dumpValueToXmlNode(occupiedArea, TAG_ANALYSIS_TOTAL_OBSTACLE_AREA));
-    root->LinkEndChild(Utils::dumpValueToXmlNode(overallObstaclesPerimeter, TAG_ANALYSIS_TOTAL_OBSTACLE_PERIMETER));
-    root->LinkEndChild(Utils::dumpValueToXmlNode(averageObstacleArea, TAG_ANALYSIS_AVERAGE_OBSTACLE_AREA));
-    root->LinkEndChild(Utils::dumpValueToXmlNode(averageObstaclePerimeter, TAG_ANALYSIS_AVERAGE_OBSTACLE_PERIMETER));
-    root->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesAreaDispersion, TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION));
-    root->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesPerimeterDispersion, TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION));
+    *logger << "[INFO] Dumping obstacles summary to XML..." << std::endl;
+    TiXmlElement* summary = new TiXmlElement( TAG_ANALYSIS_SUMMARY );
+    summary->LinkEndChild(Utils::dumpValueToXmlNode(obstacleCount, TAG_ANALYSIS_OBSTACLE_COUNT));
+    summary->LinkEndChild(Utils::dumpValueToXmlNode(occupationDensity, TAG_ANALYSIS_OCCUPATION_DENSITY));
+    summary->LinkEndChild(Utils::dumpValueToXmlNode(occupiedArea, TAG_ANALYSIS_TOTAL_OBSTACLE_AREA));
+    summary->LinkEndChild(Utils::dumpValueToXmlNode(overallObstaclesPerimeter, TAG_ANALYSIS_TOTAL_OBSTACLE_PERIMETER));
+    summary->LinkEndChild(Utils::dumpValueToXmlNode(averageObstacleArea, TAG_ANALYSIS_AVERAGE_OBSTACLE_AREA));
+    summary->LinkEndChild(Utils::dumpValueToXmlNode(averageObstaclePerimeter, TAG_ANALYSIS_AVERAGE_OBSTACLE_PERIMETER));
+    summary->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesAreaDispersion, TAG_ANALYSIS_OBSTACLE_AREA_DISPERSION));
+    summary->LinkEndChild(Utils::dumpValueToXmlNode(obstaclesPerimeterDispersion, TAG_ANALYSIS_OBSTACLE_PERIMETER_DISPERSION));
+    root->LinkEndChild(summary);
+    *logger << "[INFO] Dumping obstacles summary to XML done!" << std::endl;
+
+    if (logLevel == 1) {
+        *logger << "[INFO] Log level set to 1, do not dumping list of obstacles" << std::endl;
+    }
+    else {
+        *logger << "[INFO] Dumping list of obstacles (log level set to " << logLevel << ")..." << std::endl;
+        TiXmlElement * obstacleList = new TiXmlElement( TAG_ANALYSIS_OBSTACLE_CONTAINER );
+        for (int i = 0; i < obstacleCount; i++) obstacleList->LinkEndChild( obstacles[i].DumpToXmlElement(i) );
+        root->LinkEndChild(obstacleList);
+        *logger << "[INFO] Dumping list of obstacles done!" << std::endl;
+    }
 
     *logger << "[INFO] Dumping analysis results to XML done!" << std::endl;
     return root;

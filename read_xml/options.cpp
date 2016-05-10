@@ -15,6 +15,10 @@ Options::~Options() {
     // to be implemented
 }
 
+int Options::getLogLevel() {
+    return logLevel;
+}
+
 TiXmlElement* Options::DumpToXmlElement()
 {
     TiXmlElement* root = new TiXmlElement( TAG_OPTIONS_CONTAINER );

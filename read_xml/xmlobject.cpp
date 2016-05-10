@@ -63,7 +63,7 @@ void XMLObject::DumpToFile() {
     rootElement->LinkEndChild( options->DumpToXmlElement() );
 
     if (analyser != NULL) // RAISE WARNING, TO BE IMPLEMENTED
-        rootElement->LinkEndChild( analyser->DumpToXmlElement() );
+        rootElement->LinkEndChild( analyser->DumpToXmlElement( /*options->getLogLevel()*/2 ) );
 
     doc.LinkEndChild(rootElement);
     doc.SaveFile( fPath );
