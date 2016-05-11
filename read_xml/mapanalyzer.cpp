@@ -95,24 +95,32 @@ void MapAnalyzer::BreadthFirstSearch(std::set<Utils::Coords> & visited,
                                   std::vector<Utils::Coords> & coords) {
     std::queue<Utils::Coords> queue;
     queue.push(startCoords);
+    Utils::Coords currentCoords;
+    Utils::Coords coordsToCheck;
+    visited.insert(startCoords);
+//    int cnt = 0;
 
     while(queue.size() > 0) {
-        Utils::Coords currentCoords = queue.front();
+        currentCoords = queue.front();
         queue.pop();
         coords.push_back(currentCoords);
-        visited.insert(currentCoords);
+        //visited.insert(currentCoords);
 
         for(int i = 0; i < 4; i++) {
-            Utils::Coords coordsToCheck = currentCoords + Utils::NEIGHBOURS_NO_DIAG[i];
+            coordsToCheck = currentCoords + Utils::NEIGHBOURS_NO_DIAG[i];
             if (map->At(coordsToCheck) != INPUT_FREE_CELL &&
                 map->At(coordsToCheck) != ELEMENT_OUT_OF_GRID ) {
                 if(visited.count(coordsToCheck) == 0) {
                     queue.push(coordsToCheck);
+                    visited.insert(coordsToCheck);
+//                    cnt++;
                 }
             }
         }
     }
 
+//    queue = std::queue<Utils::Coords>();
+//    std::cerr << cnt << std::endl;
     /*
      * Here must be queue reallocating, but since I've got some problems with C++11,
      * so can't do it like with vector in Utils::reallocateVector()
