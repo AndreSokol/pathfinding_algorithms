@@ -62,8 +62,8 @@ void XMLObject::DumpToFile() {
     rootElement->LinkEndChild( algorithm->DumpToXmlElement() );
     rootElement->LinkEndChild( options->DumpToXmlElement() );
 
-    if (analyser != NULL) // RAISE WARNING, TO BE IMPLEMENTED
-        rootElement->LinkEndChild( analyser->DumpToXmlElement( /*options->getLogLevel()*/2 ) );
+    if (analyser != NULL) rootElement->LinkEndChild( analyser->DumpToXmlElement( options->getLogLevel() ) );
+    else logger << "[WARNING] Map was not analyzed! No results attached to output file." << std::endl;
 
     doc.LinkEndChild(rootElement);
     doc.SaveFile( fPath );
