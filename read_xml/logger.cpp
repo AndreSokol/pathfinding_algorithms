@@ -2,7 +2,7 @@
 
 Logger::Logger()
 {
-    logPath = "logs.txt";
+    logPath = "";
     writeToFile = false;
     writeToConsole = true;
 }
@@ -12,8 +12,10 @@ Logger::~Logger() {
 }
 
 void Logger::SetLogPath(const char * logPath) {
-    this->logPath = logPath;
-    fileOutput.open(logPath);
+    std::string logPathPrepare = std::string(logPath);
+    logPathPrepare = logPathPrepare.substr(0, logPathPrepare.length() - 4) + ".txt";
+    this->logPath = logPathPrepare.c_str();
+    fileOutput.open(this->logPath);
     writeToFile = true;
 }
 
@@ -28,4 +30,8 @@ Logger& Logger::operator << (Type msg) {
     if(writeToConsole) std::cout << msg;
     if(writeToFile) fileOutput << msg;
     return (*this);
+}
+
+std::string Logger::LogPath() {
+    return std::string(logPath);
 }

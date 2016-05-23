@@ -7,6 +7,13 @@ CONFIG -= qt
 #CONFIG -= threads
 #CONFIG -= spec
 DEFINES -= UNICODE QT_LARGEFILE_SUPPORT
+#CONFIG += address_sanitizer
+#QMAKE_CXXFLAGS += -fsanitize=address
+#QMAKE_CXXFLAGS += -fno-omit-frame-pointer
+#QMAKE_CFLAGS += -fsanitize=address
+#QMAKE_CFLAGS += -fno-omit-frame-pointer
+#QMAKE_LFLAGS += -fsanitize=address
+
 
 SOURCES += main.cpp \
     ../tinyxml/tinystr.cpp \
@@ -20,8 +27,8 @@ SOURCES += main.cpp \
     options.cpp \
     map.cpp \
     mapanalyzer.cpp \
-    xmlobject.cpp \
-    logger.cpp
+    logger.cpp \
+    xmlobject.cpp
 
 HEADERS += \
     ../tinyxml/tinystr.h \
@@ -33,8 +40,8 @@ HEADERS += \
     options.h \
     map.h \
     mapanalyzer.h \
-    xmlobject.h \
-    logger.h
+    logger.h \
+    xmlobject.h
 
 DISTFILES += \
     Logic/TagNecessity.txt

@@ -1,13 +1,13 @@
 #include "xmlobject.h"
 
-XMLObject::XMLObject()
+XMLObject::XMLObject(const char * inputFileName)
 {
     map = NULL;
     algorithm = NULL;
     options = NULL;
     fPath = "";
     analyser = NULL;
-    //logger = Logger();
+    logger.SetLogPath(inputFileName);
 }
 
 XMLObject::~XMLObject()

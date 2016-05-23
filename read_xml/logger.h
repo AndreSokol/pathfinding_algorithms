@@ -13,9 +13,10 @@ public:
     template <typename Type> Logger& operator << (Type);
 
     void SetLogPath(const char *);
+    std::string LogPath();
 private:
     bool writeToConsole;
-    const char * logPath;
+    std::string logPath;
     bool writeToFile;
     std::ofstream fileOutput;
 };

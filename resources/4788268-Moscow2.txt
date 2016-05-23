@@ -1,0 +1,1 @@
+[WARNING] No logs location specified; logs will be saved to default loaction 'D:\code\pathplanning\resources\4788268-Moscow2.txt'

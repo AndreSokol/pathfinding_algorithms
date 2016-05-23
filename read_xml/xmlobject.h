@@ -6,7 +6,7 @@
 class XMLObject
 {
 public:
-    XMLObject();
+    XMLObject(const char *);
     ~XMLObject();
 
     void SetLogPath(const char *);
