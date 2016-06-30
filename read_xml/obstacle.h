@@ -18,7 +18,7 @@ public:
 
     TiXmlElement* DumpToXmlElement(int);
 private:
-    Utils::ObstacleRow * _rows;
+    std::vector<Utils::ObstacleRow>  _rows;
     int _rowsCount;
     int _perimeter;
     int _area;

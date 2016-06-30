@@ -4,7 +4,7 @@ Obstacle::Obstacle() {
     _area = 0;
     _perimeter = 0;
     _rowsCount = 0;
-    _rows = NULL;
+    _rows = std::vector< Utils::ObstacleRow >(0);
 }
 
 Obstacle::Obstacle(const std::vector<Utils::Coords> & v)
@@ -30,7 +30,7 @@ Obstacle::Obstacle(const std::vector<Utils::Coords> & v)
 
     _rowsCount = compressedV.size();
 
-    _rows = new Utils::ObstacleRow[_rowsCount];
+    _rows = std::vector<Utils::ObstacleRow>(_rowsCount);
 
     for (int i = 0; i < _rowsCount; ++i) {
         _rows[i] = compressedV[i];
@@ -43,14 +43,14 @@ Obstacle::Obstacle(const std::vector<Utils::Coords> & v)
 }
 
 Obstacle::~Obstacle() {
-    delete [] _rows;
+    Utils::reallocateVector(_rows);
 }
 
 Obstacle& Obstacle::operator= (const Obstacle &other) {
     _area = other._area;
     _perimeter = other._perimeter;
     _rowsCount = other._rowsCount;
-    _rows = new Utils::ObstacleRow[_rowsCount];
+    _rows = std::vector< Utils::ObstacleRow> (_rowsCount);
     for(int i = 0; i < _rowsCount; ++i) {
         _rows[i] = other._rows[i];
     }
