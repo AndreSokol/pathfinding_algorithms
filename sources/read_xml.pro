@@ -20,8 +20,7 @@ SOURCES += main.cpp \
     xmlobject.cpp \
     pathfindingtask.cpp \
     algorithms/basepathfinder.cpp \
-    algorithms/astarpathfinder.cpp \
-    structures/minqueue.cpp
+    algorithms/astarpathfinder.cpp
 
 HEADERS += \
     ../tinyxml/tinystr.h \
@@ -36,8 +35,7 @@ HEADERS += \
     xmlobject.h \
     pathfindingtask.h \
     algorithms/basepathfinder.h \
-    algorithms/astarpathfinder.h \
-    structures/minqueue.h
+    algorithms/astarpathfinder.h
 
 DISTFILES += \
     Logic/TagNecessity.txt
