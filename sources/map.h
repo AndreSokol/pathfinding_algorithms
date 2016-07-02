@@ -2,6 +2,8 @@
 #define MAP_H
 
 #include "gl_settings.h"
+#include "utils.h"
+#include "logger.h"
 
 class Map
 {

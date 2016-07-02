@@ -1,4 +1,7 @@
 #include "gl_settings.h"
+#include "xmlobject.h"
+#include "logger.h"
+#include "errors.cpp"
 
 int main(int argc, char *argv[])
 {
@@ -39,8 +42,9 @@ int main(int argc, char *argv[])
     }
 
     new_map.AnalyzeMap();
-    //std::cout << new_map;
     new_map.DumpToFile();
+
+    new_map.FindPath();
 
     return 0;
 }

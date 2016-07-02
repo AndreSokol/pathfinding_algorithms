@@ -2,6 +2,10 @@
 #define ANALYSIS_H
 
 #include "gl_settings.h"
+#include "map.h"
+#include "logger.h"
+#include "utils.h"
+#include "obstacle.h"
 
 class MapAnalyzer
 {

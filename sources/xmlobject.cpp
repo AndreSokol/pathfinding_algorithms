@@ -1,4 +1,10 @@
 #include "xmlobject.h"
+#include "logger.h"
+#include "map.h"
+#include "pathfindingtask.h"
+#include "mapanalyzer.h"
+#include "options.h"
+#include "errors.cpp"
 
 XMLObject::XMLObject(const char * inputFileName)
 {
@@ -39,7 +45,7 @@ void XMLObject::LoadFromFile(const char * fPath) {
 
     map = new Map(rootHandle, &logger);
     options = new Options(rootHandle, &logger);
-    algorithm = new Algorithm(rootHandle, &logger);
+    algorithm = new PathfindingTask(rootHandle, &logger);
 
     logger << "[INFO] Reading from file done!" << std::endl;
 }
@@ -82,4 +88,8 @@ std::ostream& operator<< (std::ostream & os, const XMLObject & a) {
     else                   os << "Map has not yet been analyzed" << std::endl;
 
     return os;
+}
+
+void XMLObject::FindPath() {
+    algorithm->FindPath(map);
 }

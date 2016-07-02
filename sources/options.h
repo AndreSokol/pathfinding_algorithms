@@ -2,6 +2,7 @@
 #define OPTIONS_H
 
 #include "gl_settings.h"
+#include "logger.h"
 
 class Options {
 public:

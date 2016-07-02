@@ -1,0 +1,1 @@
+[WARNING] No logs location specified; logs will be saved to default loaction 'd:\code\pathplanning_summer\resources\1111111-sample.txt'

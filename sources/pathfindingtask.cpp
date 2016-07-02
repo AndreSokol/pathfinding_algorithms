@@ -1,7 +1,13 @@
-#include "algorithm.h"
+#include "pathfindingtask.h"
 #include "gl_settings.h"
+#include "logger.h"
+#include "errors.cpp"
+#include "utils.h"
+#include "map.h"
+#include "Algorithms/basepathfinder.h"
+#include "Algorithms/astarpathfinder.h"
 
-Algorithm::Algorithm(TiXmlHandle rootHandle, Logger* logger) {
+PathfindingTask::PathfindingTask(TiXmlHandle rootHandle, Logger* logger) {
     searchType = "astar";
     metricType = "euclid";
     hWeight = 1.0;
@@ -15,8 +21,16 @@ Algorithm::Algorithm(TiXmlHandle rootHandle, Logger* logger) {
     GetDataFromXml(rootHandle);
 }
 
-bool Algorithm::GetDataFromXml(TiXmlHandle rootHandle) {
+bool PathfindingTask::GetDataFromXml(TiXmlHandle rootHandle) {
     *logger << "[INFO] Reading algorithm settings from XML..." << std::endl;
+    TiXmlHandle mapHandle = rootHandle.FirstChild( TAG_MAP_CONTAINER );
+    if(!mapHandle.ToElement()) throw MissingTagError( TAG_MAP_CONTAINER );
+
+    Utils::parseValueFromXmlNode(mapHandle, TAG_START_X, startx);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_START_Y, starty);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_FINISH_X, finishx);
+    Utils::parseValueFromXmlNode(mapHandle, TAG_FINISH_Y, finishy);
+
     TiXmlHandle algoHandle = rootHandle.FirstChild( TAG_ALGO_CONTAINER );
     if(!algoHandle.ToElement()) throw MissingTagError( TAG_ALGO_CONTAINER );
 
@@ -34,17 +48,17 @@ bool Algorithm::GetDataFromXml(TiXmlHandle rootHandle) {
     return true;
 }
 
-Algorithm::~Algorithm() {
+PathfindingTask::~PathfindingTask() {
     // to be implemented
 }
 
-std::ostream& operator<< (std::ostream &os, const Algorithm& algo) {
+std::ostream& operator<< (std::ostream &os, const PathfindingTask& algo) {
     os << algo.searchType << " in " << algo.metricType << " metric" << std::endl;
     os << algo.diagonalCost << std::endl;
     return os;
 }
 
-TiXmlElement* Algorithm::DumpToXmlElement() {
+TiXmlElement* PathfindingTask::DumpToXmlElement() {
     *logger << "[INFO] Dumping algorithm settings to XML..." << std::endl;
     TiXmlElement* root = new TiXmlElement( TAG_ALGO_CONTAINER );
 
@@ -60,4 +74,15 @@ TiXmlElement* Algorithm::DumpToXmlElement() {
     *logger << "[INFO] Dumping algorithm settings to XML done!" << std::endl;
 
     return root;
+}
+
+void PathfindingTask::FindPath(Map * map) {
+    // As I understand we need virtual method here but I didn't manage to get it myself
+    std::cout << "### A-star search ###" << std::endl;
+    AstarPathfinder pathfinder(Utils::Coords(startx, starty), Utils::Coords(finishx, finishy), map);
+    pathfinder.InitializeSearch();
+
+    std::cout << "### Dijkstra search ###" << std::endl;
+    BasePathfinder pathfinder2(Utils::Coords(startx, starty), Utils::Coords(finishx, finishy), map);
+    pathfinder2.InitializeSearch();
 }

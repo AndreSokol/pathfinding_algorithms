@@ -2,16 +2,27 @@
 #define ALGORITHM_H
 
 #include "gl_settings.h"
+#include "algorithms/basepathfinder.h"
+#include "logger.h"
+#include "map.h"
+#include "utils.h"
 
-class Algorithm {
+class PathfindingTask {
 public:
-    Algorithm(TiXmlHandle, Logger*);
-    ~Algorithm();
+    PathfindingTask(TiXmlHandle, Logger*);
+    ~PathfindingTask();
 
-    friend std::ostream& operator<< (std::ostream &, const Algorithm &);
+    void FindPath(Map *);
+
+    friend std::ostream& operator<< (std::ostream &, const PathfindingTask &);
 
     TiXmlElement* DumpToXmlElement();
 private:
+    int startx;
+    int starty;
+    int finishx;
+    int finishy;
+
     std::string searchType;
     std::string metricType;
     double hWeight;

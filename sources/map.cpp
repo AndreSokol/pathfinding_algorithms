@@ -1,6 +1,9 @@
 #include "map.h"
 #include "utils.h"
+#include "errors.cpp"
+#include "logger.h"
 #include "gl_settings.h"
+
 
 Map::Map(TiXmlHandle rootHandle, Logger* logger) {
     mapDescription = "Untitled";

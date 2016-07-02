@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "errors.cpp"
 #include "gl_settings.h"
 
 namespace Utils {
@@ -15,43 +16,6 @@ void parseValueFromXmlNode(const TiXmlHandle & rootHandle, const char * tagName,
     }
 }
 
-template <typename Type>
-void parseValueFromXmlNode(const TiXmlHandle & rootHandle, const char * tagName,
-                           Type & fieldToWrite, bool isObliged = false) {
-
-    TiXmlElement* XmlElement = rootHandle.FirstChild( tagName ).ToElement();
-    if(!XmlElement) {
-        if (isObliged) throw MissingTagError( tagName );
-        else           ReportTagMissing( tagName , fieldToWrite);
-    } else {
-        std::istringstream(XmlElement->GetText()) >> fieldToWrite;
-    }
-}
-
-template <typename Type>
-TiXmlElement* dumpValueToXmlNode(const Type & value, const char * tagName) {
-    TiXmlElement * node = new TiXmlElement( tagName );
-    node->LinkEndChild(new TiXmlText( toString(value) ));
-    return node;
-}
-
-template <typename Type>
-std::string toString(const Type& element) {
-    std::ostringstream sstream;
-    sstream << element;
-    return sstream.str();
-}
-
-template <typename Type>
-void ReportTagMissing(const std::string & tag, const Type & default_value) {
-    std::cerr << "[WARNING] Tag <" << tag << "> is missing; default value '" << default_value << "' set." << std::endl;
-}
-
-template<typename Type>
-void reallocateVector(std::vector<Type> & v) {
-    std::vector<Type>().swap(v);
-}
-
 Coords::Coords() {
     x = 0;
     y = 0;
@@ -66,9 +30,36 @@ Coords Coords::operator+(const Coords & other) {
     return Coords(this->x + other.x, this->y + other.y);
 }
 
+bool operator==(const Coords &a, const Coords &b)
+{
+    return a.x == b.x && a.y == b.y;
+}
+
+bool operator!=(const Coords & a, const Coords & b)
+{
+    return !(a == b);
+}
+
 bool operator< (const Coords & a, const Coords & b) {
     if (a.x == b.x) return a.y < b.y;
     return a.x < b.x;
+}
+
+CoordsContainer::CoordsContainer() {
+    coords = Coords();
+    prev_coords = Coords();
+    distance = 0;
+}
+
+CoordsContainer::CoordsContainer(Coords coords, Coords prev_coords, int distance) {
+    this->coords = coords;
+    this->prev_coords = prev_coords;
+    this->distance = distance;
+}
+
+bool operator==(const CoordsContainer & a, const CoordsContainer & b)
+{
+    return a.coords == b.coords;
 }
 
 }

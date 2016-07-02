@@ -1,5 +1,8 @@
 #include "gl_settings.h"
 
+#ifndef ERRORS_CPP
+#define ERRORS_CPP
+
 class MissingTagError
 {
 public:
@@ -33,3 +36,5 @@ private:
     std::string _path;
     std::string _msg;
 };
+
+#endif

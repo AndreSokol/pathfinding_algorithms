@@ -25,13 +25,6 @@ Logger& Logger::operator << (std::ostream&(*pManip)(std::ostream&)) {
     return (*this);
 }
 
-template <typename Type>
-Logger& Logger::operator << (Type msg) {
-    if(writeToConsole) std::cout << msg;
-    if(writeToFile) fileOutput << msg;
-    return (*this);
-}
-
 std::string Logger::LogPath() {
     return std::string(logPath);
 }

@@ -1,6 +1,8 @@
 #include "options.h"
 #include "gl_settings.h"
-
+#include "logger.h"
+#include "utils.h"
+#include "errors.cpp"
 
 Options::Options(TiXmlHandle rootHandle, Logger* logger) {
     logLevel = 1;

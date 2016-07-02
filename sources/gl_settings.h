@@ -21,17 +21,17 @@
 
 #ifndef PROJECT_FILES
 #define PROJECT_FILES
-
+/*
 #include "logger.cpp"
 #include "errors.cpp"
 #include "utils.cpp"
 #include "obstacle.cpp"
-#include "algorithm.cpp"
+#include "pathfindingtask.cpp"
 #include "options.cpp"
 #include "map.cpp"
 #include "mapanalyzer.cpp"
 #include "xmlobject.cpp"
-
+*/
 #endif
 
 #ifndef GL_VARS

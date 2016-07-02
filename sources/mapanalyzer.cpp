@@ -19,7 +19,7 @@ MapAnalyzer::MapAnalyzer(Map * mapToAnalyze, Logger * logger)
 }
 
 MapAnalyzer::~MapAnalyzer() {
-    //delete [] obstacles;
+
 }
 
 void MapAnalyzer::AnalyzeMap() {

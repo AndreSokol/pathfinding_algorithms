@@ -2,6 +2,7 @@
 #define OBSTACLE_H
 
 #include "gl_settings.h"
+#include "utils.h"
 
 class Obstacle
 {

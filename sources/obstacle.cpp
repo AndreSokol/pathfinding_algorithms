@@ -1,4 +1,5 @@
 #include "obstacle.h"
+#include "utils.h"
 
 Obstacle::Obstacle() {
     _area = 0;

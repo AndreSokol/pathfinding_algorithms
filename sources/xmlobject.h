@@ -2,6 +2,11 @@
 #define XMLOBJECT_H
 
 #include "gl_settings.h"
+#include "logger.h"
+#include "map.h"
+#include "pathfindingtask.h"
+#include "options.h"
+#include "mapanalyzer.h"
 
 class XMLObject
 {
@@ -12,6 +17,7 @@ public:
     void SetLogPath(const char *);
     void LoadFromFile(const char *);
     void AnalyzeMap();
+    void FindPath();
 
     friend std::ostream& operator<< (std::ostream &, const XMLObject &);
     void DumpToFile();
@@ -19,12 +25,13 @@ public:
     void LogMessage(std::string);
 
     Logger logger;
+
 private:
     Map *map;
-    Algorithm *algorithm;
+    PathfindingTask *algorithm;
     Options *options;
-    std::string fPath;
     MapAnalyzer *analyser;
+    std::string fPath;
 };
 
 #endif // XMLOBJECT_H
