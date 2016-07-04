@@ -43,16 +43,16 @@ void XMLObject::LoadFromFile(const char * fPath) {
     TiXmlHandle rootHandle = docHandle.FirstChild( TAG_ROOT );
     if(!rootHandle.ToElement()) throw MissingTagError( TAG_ROOT );
 
-    map = new Map(rootHandle, &logger);
-    options = new Options(rootHandle, &logger);
-    algorithm = new PathfindingTask(rootHandle, &logger);
+    map = new Map(rootHandle);
+    options = new Options(rootHandle);
+    algorithm = new PathfindingTask(rootHandle);
 
     logger << "[INFO] Reading from file done!" << std::endl;
 }
 
 void XMLObject::AnalyzeMap() {
     logger << "[INFO] Analysing map..." << std::endl;
-    analyser = new MapAnalyzer(map, &logger);
+    analyser = new MapAnalyzer(map);
     logger << "[INFO] Analysis done!" << std::endl;
 }
 

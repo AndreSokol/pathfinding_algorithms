@@ -10,7 +10,7 @@
 class MapAnalyzer
 {
 public:
-    MapAnalyzer(Map *, Logger *);
+    MapAnalyzer(Map *);
     ~MapAnalyzer();
 
     friend std::ostream& operator<< (std::ostream &, const MapAnalyzer &);
@@ -40,7 +40,7 @@ private:
     Obstacle * obstacles;
     int obstacleCount;
     Map * map;
-    Logger *logger;
+    LoggerInterface logger;
 };
 
 #endif // ANALYSIS_H

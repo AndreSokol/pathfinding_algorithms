@@ -7,9 +7,17 @@ Logger::Logger()
     writeToConsole = true;
 }
 
+Logger::Logger(const Logger &other)
+{
+    this->logPath = other.logPath;
+    this->writeToConsole = other.writeToConsole;
+    this->writeToFile = other.writeToFile;
+}
+
 Logger::~Logger() {
     if(writeToFile) fileOutput.close();
 }
+
 
 void Logger::SetLogPath(const char * logPath) {
     std::string logPathPrepare = std::string(logPath);
@@ -28,3 +36,5 @@ Logger& Logger::operator << (std::ostream&(*pManip)(std::ostream&)) {
 std::string Logger::LogPath() {
     return std::string(logPath);
 }
+
+Logger LoggerInterface::logger = Logger();

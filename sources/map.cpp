@@ -5,7 +5,7 @@
 #include "gl_settings.h"
 
 
-Map::Map(TiXmlHandle rootHandle, Logger* logger) {
+Map::Map(TiXmlHandle rootHandle) {
     mapDescription = "Untitled";
     startx = 0;
     starty = 0;
@@ -15,7 +15,6 @@ Map::Map(TiXmlHandle rootHandle, Logger* logger) {
     height = 0;
     width = 0;
     grid = NULL;
-    this->logger = logger;
 
     GetMapFromXML(rootHandle);
 }
@@ -28,7 +27,7 @@ Map::~Map () {
 }
 
 void Map::GetMapFromXML(TiXmlHandle rootHandle) {
-    *logger << "[INFO] Reading map info from XML..." << std::endl;
+    logger << "[INFO] Reading map info from XML..." << std::endl;
     Utils::parseValueFromXmlNode(rootHandle, TAG_DESC, mapDescription);
 
     TiXmlHandle mapHandle = rootHandle.FirstChild( TAG_MAP_CONTAINER );
@@ -64,11 +63,11 @@ void Map::GetMapFromXML(TiXmlHandle rootHandle) {
         }
     }
 
-    *logger << "[INFO] Reading map info done!" << std::endl;
+    logger << "[INFO] Reading map info done!" << std::endl;
 }
 
 TiXmlElement* Map::DumpToXmlElement() {
-    *logger << "[INFO] Dumping map to XML..." << std::endl;
+    logger << "[INFO] Dumping map to XML..." << std::endl;
 
     TiXmlElement* mapContainer = new TiXmlElement( TAG_MAP_CONTAINER );
 
@@ -95,7 +94,7 @@ TiXmlElement* Map::DumpToXmlElement() {
     }
     mapContainer->LinkEndChild(gridEl);
 
-    *logger << "[INFO] Dumping map to XML done!" << std::endl;
+    logger << "[INFO] Dumping map to XML done!" << std::endl;
 
     return mapContainer;
 }

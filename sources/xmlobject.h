@@ -24,7 +24,7 @@ public:
 
     void LogMessage(std::string);
 
-    Logger logger;
+    LoggerInterface logger;
 
 private:
     Map *map;

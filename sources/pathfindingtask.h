@@ -9,7 +9,7 @@
 
 class PathfindingTask {
 public:
-    PathfindingTask(TiXmlHandle, Logger*);
+    PathfindingTask(TiXmlHandle);
     ~PathfindingTask();
 
     void FindPath(Map *);
@@ -31,7 +31,7 @@ private:
     double diagonalCost;
     bool allowDiagonal;
     bool allowSqueeze;
-    Logger *logger;
+    LoggerInterface logger;
 
     bool GetDataFromXml(TiXmlHandle);
 };

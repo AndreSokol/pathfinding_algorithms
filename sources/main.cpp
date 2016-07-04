@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    LoggerInterface logger;
+
     XMLObject new_map(argv[1]);
 
     if (argc == 4) {
@@ -18,13 +20,15 @@ int main(int argc, char *argv[])
             return 0;
         }
 
-        new_map.SetLogPath(argv[3]);
+        logger.SetLogPath(argv[3]);
     }
     else {
-        new_map.logger << "[WARNING] No logs location specified; logs will be saved to default loaction '" <<
-                       new_map.logger.LogPath() << "'" << std::endl;
-        new_map.SetLogPath("logs.txt");
+        logger << "[WARNING] No logs location specified; logs will be saved to default loaction '" <<
+                       logger.LogPath() << "'" << std::endl;
     }
+
+    logger << "test";
+    logger << "test";
 
     try {
         new_map.LoadFromFile(argv[1]);

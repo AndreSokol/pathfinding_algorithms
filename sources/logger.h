@@ -7,6 +7,7 @@ class Logger
 {
 public:
     Logger();
+    Logger(const Logger &other);
     ~Logger();
 
     Logger& operator<< (std::ostream &(*pManip)(std::ostream &));
@@ -29,6 +30,27 @@ private:
     std::ofstream fileOutput;
 };
 
+class LoggerInterface {
+public:
+    template <typename Type> LoggerInterface& operator<< (Type msg) {
+        logger << msg;
+        return (*this);
+    }
 
+    LoggerInterface& operator<<(std::ostream &(*pManip)(std::ostream &)) {
+        logger << pManip;
+        return (*this);
+    }
+
+    void SetLogPath(const char * logPath) {
+        logger.SetLogPath(logPath);
+    }
+
+    std::string LogPath() {
+        return logger.LogPath();
+    }
+private:
+    static Logger logger;
+};
 
 #endif // LOGGER_H
