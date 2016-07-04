@@ -3,9 +3,8 @@
 
 #include "../utils.h"
 #include "../map.h"
-#include <functional>
-
-typedef std::function<bool(const Utils::CoordsContainer &, const Utils::CoordsContainer &)> CmpType;
+#include <chrono>
+#include <ctime>
 
 class BasePathfinder
 {
@@ -22,10 +21,16 @@ protected:
 
     Map * map;
 
-    template<typename OpenType, typename ClosedType>
-    void ExecuteSearch(OpenType & open, ClosedType &closed)
+    std::vector<Utils::Coords> founded_path;
+    double elapsed_exec_time;
+
+    template<typename OT, typename CT>
+    void ExecuteSearch(OT & open, CT &closed)
     {
         open.push(Utils::CoordsContainer(start, start, 0));
+
+        std::chrono::time_point<std::chrono::system_clock> start_time, end_time;
+        start_time = std::chrono::system_clock::now();
 
         Utils::CoordsContainer current_point, next_point;
         while(!open.empty() && current_point.coords != finish) {
@@ -46,30 +51,31 @@ protected:
             closed[current_point.coords] = current_point.prev_coords;
         }
 
-        if(current_point.coords != finish) std::cout << "No way found" << std::endl;
-        else {
-            std::vector<Utils::Coords> way;
 
+        end_time = std::chrono::system_clock::now();
+        elapsed_exec_time = std::chrono::duration<double>(end_time - start_time).count();
+
+        LoggerInterface logger;
+
+        if(current_point.coords != finish) logger << "[SEARCH] No way found!" << std::endl;
+        else {
             Utils::Coords way_point = finish;
             while(way_point != start) {
-                way.push_back(way_point);
+                founded_path.push_back(way_point);
                 way_point = closed[way_point];
             }
-            way.push_back(start);
+            founded_path.push_back(start);
 
-            reverse(way.begin(), way.end());
+            reverse(founded_path.begin(), founded_path.end());
 
-            std::cout << "### Search results ###" << std::endl;
-            std::cout << "'Closed' size: " << closed.size() << std::endl;
-            std::cout << "'Open' size: " << open.size() << std::endl;
-            std::cout << "Way length: " << way.size() << std::endl;
-            /*std::cout << "Way by coordinates:" << std::endl;
-            for(unsigned int i = 0; i < way.size(); i++) {
-                std::cout << i << "  (" << way[i].x << ", " << way[i].y << ")" <<
-                          this->F(Utils::CoordsContainer(way[i], way[i], 0)) << std::endl;
-            }*/
         }
+
+        logger << "[SEARCH] Elapsed time: " << elapsed_exec_time << "s" << std::endl;
+        logger << "[SEARCH] 'Closed' size: " << closed.size() << std::endl;
+        logger << "[SEARCH] 'Open' size: " << open.size() << std::endl;
+        logger << "[SEARCH] Way length: " << founded_path.size() << std::endl;
     }
+
 
 public:
     BasePathfinder();
@@ -77,6 +83,7 @@ public:
 
     virtual void InitializeSearch();
 
+    TiXmlElement* DumpLogToXml();
 };
 
 #endif // BASEPATHFINDER_H

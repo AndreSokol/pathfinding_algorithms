@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     new_map.AnalyzeMap();
     new_map.DumpToFile();
 
-    new_map.FindPath();
+    // new_map.FindPath();
 
     return 0;
 }

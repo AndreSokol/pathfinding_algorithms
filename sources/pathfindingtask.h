@@ -12,7 +12,7 @@ public:
     PathfindingTask(TiXmlHandle);
     ~PathfindingTask();
 
-    void FindPath(Map *);
+    TiXmlElement* FindPath(Map *);
 
     friend std::ostream& operator<< (std::ostream &, const PathfindingTask &);
 

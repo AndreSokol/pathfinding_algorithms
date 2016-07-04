@@ -71,6 +71,9 @@ void XMLObject::DumpToFile() {
     if (analyser != NULL) rootElement->LinkEndChild( analyser->DumpToXmlElement( options->getLogLevel() ) );
     else logger << "[WARNING] Map was not analyzed! No results attached to output file." << std::endl;
 
+    /* DEBUG CODE, REMOVE LATER */
+    rootElement->LinkEndChild( algorithm->FindPath(map) );
+
     doc.LinkEndChild(rootElement);
     doc.SaveFile( fPath );
 

@@ -75,7 +75,7 @@ TiXmlElement* PathfindingTask::DumpToXmlElement() {
     return root;
 }
 
-void PathfindingTask::FindPath(Map * map) {
+TiXmlElement* PathfindingTask::FindPath(Map * map) {
     // As I understand we need virtual method here but I didn't manage to get it myself
     std::cout << "### A-star search ###" << std::endl;
     AstarPathfinder pathfinder(Utils::Coords(startx, starty), Utils::Coords(finishx, finishy), map);
@@ -84,4 +84,6 @@ void PathfindingTask::FindPath(Map * map) {
     std::cout << "### Dijkstra search ###" << std::endl;
     BasePathfinder pathfinder2(Utils::Coords(startx, starty), Utils::Coords(finishx, finishy), map);
     pathfinder2.InitializeSearch();
+
+    return pathfinder.DumpLogToXml();
 }
