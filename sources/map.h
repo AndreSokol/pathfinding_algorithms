@@ -1,37 +1,31 @@
 #ifndef MAP_H
-#define MAP_H
-
-#include "gl_settings.h"
-#include "utils.h"
-#include "logger.h"
-
+#define	MAP_H
+#include "tinystr.h"
+#include "tinyxml.h"
+#include <iostream>
+#include "gl_const.h"
+#include <sstream>
+#include <string>
+#include <algorithm>
 class Map
 {
-public:
-    Map(TiXmlHandle);
-    ~Map();
+    public:
+        Map();
+        Map(const Map& orig);
+        ~Map();
 
-    TiXmlElement* DumpToXmlElement();
-    int GetMapArea();
-    int GetHeight();
-    int GetWidth();
-    int At(int, int);
-    int At(Utils::Coords);
+        bool getMap(const char *FileName);
+        bool CellIsTraversable (int i, int j) const;
+        bool CellOnGrid (int i, int j) const;
+        bool CellIsObstacle(int i, int j) const;
+        int  getValue(int i, int j) const;
 
-    friend std::ostream& operator<< (std::ostream &, const Map &);
-private:
-    int **grid;
-    int width;
-    int height;
-    int cellsize;
-    int startx;
-    int starty;
-    int finishx;
-    int finishy;
-    std::string mapDescription;
-    LoggerInterface logger;
-
-    void GetMapFromXML(TiXmlHandle);
+    public:
+        int**   Grid;
+        int     height, width;
+        int     start_i, start_j;
+        int     goal_i, goal_j;
 };
 
-#endif // MAP_H
+#endif
+
