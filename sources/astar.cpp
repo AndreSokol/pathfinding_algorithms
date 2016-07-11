@@ -58,7 +58,7 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
             for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0) continue;
 
-                if (i * j != 0) {
+                if (i * j != 0) { // this means i != 0 and j != 0
                     if (options.allowdiagonal == 0) continue;
                     is_diagonal = true;
                 }
@@ -72,6 +72,10 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
                 if (!Map.CellOnGrid(new_node.i, new_node.j)) continue;
                 if (Map.CellIsObstacle(new_node.i, new_node.j)) continue;
                 if (closed.count(new_node) != 0) continue;
+                if (is_diagonal)
+                    if (!options.allowsqueeze &&
+                            (Map.CellIsObstacle(new_node.i, current_node.j) || Map.CellIsObstacle(current_node.i, new_node.j)))
+                                    continue;
 
                 new_node.parent_i = current_node.i;
                 new_node.parent_j = current_node.j;
