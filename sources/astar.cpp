@@ -45,16 +45,6 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
         if (closed.count(current_node) != 0) continue;
         closed.insert(current_node);
 
-        //std::cout << current_node.i << " " << current_node.j << std::endl;
-
-        /*Node x, y;
-        x.i = 0;
-        x.j = 1;
-        y.i = x.i;
-        y.j = x.j;
-        std::cout << (x == y) << std::endl;*/
-
-
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0) continue;
@@ -91,7 +81,6 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
                 open.push(new_node);
 
                 if(new_node == goal) {
-                    std::cerr << "lol" << std::endl;
                     sresult.pathfound = true;
                     break;
                 }
@@ -117,8 +106,6 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
         sresult.hppath = new NodeList();
 
         while (!(current_node == start)) {
-            //std::cout << "T" << std::endl;
-
             sresult.lppath->push_front(current_node);
             sresult.hppath->push_front(current_node);
             sresult.pathlength++;
@@ -137,12 +124,6 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
         sresult.hppath = NULL;
         sresult.pathlength = 0;
     }
-
-    /*std::list<Node>::iterator it = sresult.lppath->List.begin();
-    std::list<Node>::iterator it_end = sresult.lppath->List.end();
-    for(; it != it_end; it++) {
-        std::cout << (*it).i << " " << (*it).j << std::endl;
-    }*/
 
     return sresult;
 }
