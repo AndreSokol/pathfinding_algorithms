@@ -2,6 +2,7 @@
 #include <set>
 #include "orderedvector.h"
 #include <chrono>
+#include <cmath>
 
 Astar::Astar(double w, int BT, int SL)
 {
@@ -149,8 +150,15 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
 void Astar::calculateHeuristic(Node & a, const Map &map, const EnvironmentOptions &options)
 {
     a.F = a.g;
-    if(options.metrictype == CN_SP_MT_EUCL) a.H = sqrt((a.i - map.goal_i) * (a.i - map.goal_i) + (a.j - map.goal_j) * (a.j - map.goal_j));
-    else a.H = 0;
+    int di = abs(a.i - map.goal_i),
+        dj = abs(a.j - map.goal_j);
+
+    // Normalizing heuristics with linecost
+    if(options.metrictype == CN_SP_MT_EUCL) a.H = sqrt(di * di + dj * dj) * options.linecost;
+    else if (options.metrictype == CN_SP_MT_MANH) a.H = (di + dj) * options.linecost;
+    else if (options.metrictype == CN_SP_MT_DIAG) a.H = std::min(di, dj) * options.diagonalcost +
+                                                                        abs(di - dj) * options.linecost;
+    else a.H = std::max(di, dj) * options.linecost;
 
     a.F += hweight * a.H;
 }

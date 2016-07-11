@@ -54,7 +54,7 @@
     </options>
     <log>
         <mapfilename>../resources/1111111-sample.xml</mapfilename>
-        <summary numberofsteps="267" nodescreated="479" length="23" time="0.0065126" />
+        <summary numberofsteps="267" nodescreated="479" length="23" time="0.0080282" />
         <path>
             <row number="0">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
             <row number="1">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
