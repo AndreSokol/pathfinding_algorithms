@@ -5,8 +5,8 @@ struct Node
 {
     int i, j;
     double F, g, H;
-    Node *parent;
-    int parent_i, parent_j;
+    const Node *parent;
+    //int parent_i, parent_j;
 
     bool operator==(const Node & other) {
         return i == other.i && j == other.j;

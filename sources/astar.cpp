@@ -43,7 +43,8 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
     while (!open.empty()) {
         current_node = open.pop();
         if (closed.count(current_node) != 0) continue;
-        closed.insert(current_node);
+
+        auto current_node_iterator = closed.insert(current_node).first;
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -57,6 +58,7 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
                     is_diagonal = false;
                 }
 
+                new_node.parent = &(*current_node_iterator);
                 new_node.i = current_node.i + i;
                 new_node.j = current_node.j + j;
 
@@ -68,9 +70,6 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
                     if (!options.allowsqueeze &&
                             (Map.CellIsObstacle(new_node.i, current_node.j) || Map.CellIsObstacle(current_node.i, new_node.j)))
                                     continue;
-
-                new_node.parent_i = current_node.i;
-                new_node.parent_j = current_node.j;
 
                 if (is_diagonal)
                     new_node.g = current_node.g + options.diagonalcost;
@@ -101,7 +100,6 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
         sresult.pathlength = 0;
 
         current_node = new_node;
-        Node temp;
 
         sresult.lppath = new NodeList();
         sresult.hppath = new NodeList();
@@ -111,9 +109,7 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
             sresult.hppath->push_front(current_node);
             sresult.pathlength++;
 
-            temp.i = current_node.parent_i;
-            temp.j = current_node.parent_j;
-            current_node = *(closed.find(temp));
+            current_node = *current_node.parent;
         }
 
         // Adding start node to path
