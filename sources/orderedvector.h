@@ -51,6 +51,20 @@ public:
     int size() {
         return _data.size();
     }
+
+    bool find(const T & element) {
+        int lo = 0,
+            hi = _data.size(),
+            mid;
+
+        while (hi - lo > 1) {
+            mid = (hi + lo) / 2;
+            if (_data[mid] > element) hi = mid;
+            else                      lo = mid;
+        }
+
+        return (_data[lo] == element);
+    }
 };
 
 #endif // ORDEREDVECTOR_H

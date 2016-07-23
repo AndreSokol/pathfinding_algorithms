@@ -16,6 +16,11 @@ struct Node
         if(a.i == b.i) return a.j < b.j;
         return a.i < b.i;
     }
+
+    friend bool operator>(const Node & a, const Node & b) {
+        if(a.i == b.i) return a.j > b.j;
+        return a.i > b.i;
+    }
 };
 
 #endif
