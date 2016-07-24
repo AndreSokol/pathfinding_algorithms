@@ -1,5 +1,6 @@
 #include "mission.h"
 #include "astar.h"
+#include "jpsearch.h"
 #include "xmllogger.h"
 #include "gl_const.h"
 
@@ -42,22 +43,25 @@ bool Mission::createLog()
 
 void Mission::createEnvironmentOptions()
 {
-    options.metrictype=config.SearchParams[CN_SP_MT];
-    options.allowdiagonal=config.SearchParams[CN_SP_AD];
-    options.allowsqueeze=config.SearchParams[CN_SP_AS];
-    options.linecost=config.SearchParams[CN_SP_LC];
-    options.diagonalcost=config.SearchParams[CN_SP_DC];
-    options.useresetparent=config.SearchParams[CN_SP_RP];
+    options.metrictype = config.SearchParams[CN_SP_MT];
+    options.allowdiagonal = config.SearchParams[CN_SP_AD];
+    options.allowsqueeze = config.SearchParams[CN_SP_AS];
+    options.linecost = config.SearchParams[CN_SP_LC];
+    options.diagonalcost = config.SearchParams[CN_SP_DC];
+    options.useresetparent = config.SearchParams[CN_SP_RP];
 }
 
 void Mission::createSearch()
 {
-    search = new Astar(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT], config.SearchParams[CN_SP_SL]);
+    /*if (config.SearchParams[CN_SP_ST] == CN_SP_ST_ASTAR)
+        search = new Astar(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT], config.SearchParams[CN_SP_SL]);
+    else if (config.SearchParams[CN_SP_ST] == CN_SP_ST_JP_SEARCH)
+        */search = new JPSearch(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT], config.SearchParams[CN_SP_SL]);
 }
 
 void Mission::startSearch()
 {
-    sr=search->startSearch(logger, map, options);
+    sr = search->startSearch(logger, map, options);
 }
 
 void Mission::printSearchResultsToConsole()

@@ -27,7 +27,8 @@ SOURCES += \
     config.cpp \
     astar.cpp \
     asearch.cpp \
-    environmentoptions.cpp
+    environmentoptions.cpp \
+    jpsearch.cpp
 
 HEADERS += \
     tinyxml.h \
@@ -44,4 +45,5 @@ HEADERS += \
     astar.h \
     searchresult.h \
     environmentoptions.h \
-    orderedvector.h
+    orderedvector.h \
+    jpsearch.h

@@ -7,9 +7,11 @@ struct Node
     double F, g, H;
     const Node *parent;
     //int parent_i, parent_j;
+    Node(){}
+    Node(int i, int j){this->i=i;this->j=j;}
 
-    bool operator==(const Node & other) {
-        return i == other.i && j == other.j;
+    friend bool operator==(const Node & a, const Node & b) {
+        return a.i == b.i && a.j == b.j;
     }
 
     friend bool operator<(const Node & a, const Node & b) {

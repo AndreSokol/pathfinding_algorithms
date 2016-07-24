@@ -71,6 +71,9 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
                             (Map.CellIsObstacle(new_node.i, current_node.j) || Map.CellIsObstacle(current_node.i, new_node.j)))
                                     continue;
 
+                //new_node.parent_i = current_node.i;
+                //new_node.parent_j = current_node.j;
+
                 if (is_diagonal)
                     new_node.g = current_node.g + options.diagonalcost;
                 else
@@ -100,7 +103,6 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
         sresult.pathlength = 0;
 
         current_node = new_node;
-
         sresult.lppath = new NodeList();
         sresult.hppath = new NodeList();
 

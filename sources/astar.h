@@ -5,6 +5,7 @@
 #include "ilogger.h"
 #include <stdlib.h>
 #include <math.h>
+
 class Astar : public ISearch
 {
     public:
@@ -13,7 +14,7 @@ class Astar : public ISearch
         SearchResult startSearch(ILogger *Logger, const Map &Map, const EnvironmentOptions &options);
         bool F_cmp(Node, Node);
 
-    private:
+    protected:
         void calculateHeuristic(Node &a, const Map &map, const EnvironmentOptions &options);
 };
 
