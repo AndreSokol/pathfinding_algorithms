@@ -57,9 +57,17 @@ SearchResult JPSearch::startSearch(ILogger *Logger, const Map &Map, const Enviro
                     is_diagonal = false;
                 }
 
+                if (!Map.CellOnGrid(current_node.i + i, current_node.j + j)) continue;
+                if (Map.CellIsObstacle(current_node.i + i, current_node.j + j)) continue;
+                if (is_diagonal) {
+                    if (Map.CellIsObstacle(current_node.i + i, current_node.j) &&
+                            Map.CellIsObstacle(current_node.i, current_node.j + j) &&
+                            !options.allowsqueeze) continue;
+                }
+
                 new_node = Node(current_node.i + i, current_node.j + j);
 
-                std::pair<bool,Node> jump_result = jump(new_node, i, j, Map, goal);
+                std::pair<bool,Node> jump_result = jump(new_node, i, j, Map, goal, options);
 
                 if(jump_result.first) {
                     new_node.i = jump_result.second.i;
@@ -93,11 +101,32 @@ SearchResult JPSearch::startSearch(ILogger *Logger, const Map &Map, const Enviro
 
         sresult.lppath = new NodeList();
         sresult.hppath = new NodeList();
+        sresult.lppath->push_front(current_node);
+        sresult.hppath->push_front(current_node);
+
+        int di, dj;
 
         while (!(current_node == start)) {
-            sresult.lppath->push_front(current_node);
+            new_node = *current_node.parent;
             sresult.hppath->push_front(current_node);
-            sresult.pathlength++;
+
+            if      (current_node.i - new_node.i > 0)  di = -1;
+            else if (current_node.i - new_node.i == 0) di = 0;
+            else                                       di = 1;
+
+            if      (current_node.j - new_node.j > 0)  dj = -1;
+            else if (current_node.j - new_node.j == 0) dj = 0;
+            else                                       dj = 1;
+
+            while (!(current_node == new_node)) {
+                sresult.lppath->push_front(current_node);
+                current_node.i += di;
+                current_node.j += dj;
+                if (di * dj == 0)
+                    sresult.pathlength += options.linecost;
+                else
+                    sresult.pathlength += options.diagonalcost;
+            }
 
             current_node = *current_node.parent;
         }
@@ -115,11 +144,13 @@ SearchResult JPSearch::startSearch(ILogger *Logger, const Map &Map, const Enviro
     return sresult;
 }
 
-std::pair<bool, Node> JPSearch::jump(const Node &node, int di, int dj, const Map &map, const Node &goal)
+std::pair<bool, Node> JPSearch::jump(const Node &node, int di, int dj, const Map &map, const Node &goal, const EnvironmentOptions &options)
 {
+    // just to be sure, some problems there
+    if (map.CellIsObstacle(node.i, node.j)) return std::pair<bool, Node>(false, node);
+
     // goal point is also the jump point
     if (node == goal) return std::pair<bool, Node>(true, node);
-    if (!map.CellOnGrid(node.i + di, node.j + dj)) {std::cout << "border" << std::endl; return std::pair<bool, Node>(false, node);}
 
     if (di * dj == 0) { // moving along lines
         if (map.CellIsObstacle(node.i + di, node.j + dj)) return std::pair<bool, Node>(false, node);
@@ -139,8 +170,11 @@ std::pair<bool, Node> JPSearch::jump(const Node &node, int di, int dj, const Map
                 !map.CellIsObstacle(node.i - 1, node.j + dj)) return std::pair<bool, Node>(true, node);
         }
 
+        // check if we reached border
+        if (!map.CellOnGrid(node.i + di, node.j + dj)) return std::pair<bool, Node>(false, node);
+
         // can move forward in any other case
-        return jump(Node(node.i + di, node.j + dj), di, dj, map, goal);
+        return jump(Node(node.i + di, node.j + dj), di, dj, map, goal, options);
     }
     else { // moving diagonal
         if (map.CellIsObstacle(node.i - di, node.j) &&
@@ -148,13 +182,19 @@ std::pair<bool, Node> JPSearch::jump(const Node &node, int di, int dj, const Map
         if (map.CellIsObstacle(node.i, node.j - dj) &&
                 !map.CellIsObstacle(node.i + di, node.j - dj)) return std::pair<bool,Node>(true, node);
 
+
+        if (jump(Node(node.i + di, node.j), di, 0, map, goal, options).first) return std::pair<bool,Node>(true, node);
+        if (jump(Node(node.i, node.j + dj), 0, dj, map, goal, options).first) return std::pair<bool,Node>(true, node);
+
         if (map.CellIsObstacle(node.i + di, node.j + dj)) return std::pair<bool, Node>(false, node);
 
-        if (jump(node, di, 0, map, goal).first) return std::pair<bool,Node>(true, node);
+        if (map.CellIsObstacle(node.i + di, node.j) && map.CellIsObstacle(node.i, node.j + dj) &&
+                !options.allowsqueeze) return std::pair<bool, Node>(false, node);
 
-        if (jump(node, 0, dj, map, goal).first) return std::pair<bool,Node>(true, node);
+        // check if we reached border
+        if (!map.CellOnGrid(node.i + di, node.j + dj)) return std::pair<bool, Node>(false, node);
 
-        return jump(Node(node.i + di, node.j + dj), di, dj, map, goal);
+        return jump(Node(node.i + di, node.j + dj), di, dj, map, goal, options);
     }
 }
 

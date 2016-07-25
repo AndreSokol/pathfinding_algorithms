@@ -13,7 +13,7 @@ public:
     SearchResult startSearch(ILogger *Logger, const Map &Map, const EnvironmentOptions &options);
 
 private:
-    std::pair<bool, Node> jump(const Node &node, int di, int dj, const Map &map, const Node &goal);
+    std::pair<bool, Node> jump(const Node &node, int di, int dj, const Map &map, const Node &goal, const EnvironmentOptions &options);
     void calculateHeuristic(Node &a, const Map &map, const EnvironmentOptions &options);
 };
 

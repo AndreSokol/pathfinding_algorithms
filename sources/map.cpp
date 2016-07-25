@@ -45,6 +45,7 @@ bool Map::CellIsTraversable(int i, int j) const
 
 bool Map::CellIsObstacle(int i, int j) const
 {
+    if (!CellOnGrid(i, j)) return false;
     return (Grid[i][j] != CN_GC_NOOBS);
 }
 
