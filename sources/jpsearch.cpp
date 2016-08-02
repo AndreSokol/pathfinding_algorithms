@@ -200,8 +200,9 @@ std::pair<bool, Node> JPSearch::jump(const Node &node, int di, int dj, const Map
 
 void JPSearch::calculateHeuristic(Node &a, const Map &map, const EnvironmentOptions &options)
 {
-    int di = abs(a.i - map.goal_i),
-        dj = abs(a.j - map.goal_j);
+
+    int di = abs(a.i - a.parent->i),
+        dj = abs(a.j - a.parent->j);
 
     a.g = a.parent->g;
     if(options.allowdiagonal)
@@ -209,7 +210,11 @@ void JPSearch::calculateHeuristic(Node &a, const Map &map, const EnvironmentOpti
     else
         a.g += (di + dj) * options.linecost;
 
+
     a.F = a.g;
+
+    di = abs(a.i - map.goal_i);
+    dj = abs(a.j - map.goal_j);
 
     // Normalizing heuristics with linecost
     if (options.metrictype == CN_SP_MT_EUCL)      a.H = sqrt(di * di + dj * dj) * options.linecost;
