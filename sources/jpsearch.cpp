@@ -45,45 +45,45 @@ SearchResult JPSearch::startSearch(ILogger *Logger, const Map &Map, const Enviro
 
         auto current_node_iterator = closed.insert(current_node).first;
 
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) continue;
+        int i, j;
 
-                if (i * j != 0) { // this means i != 0 and j != 0
-                    if (options.allowdiagonal == 0) continue;
-                    is_diagonal = true;
-                }
-                else {
-                    is_diagonal = false;
-                }
+        for (auto delta : generateCanonicalOrdering(current_node, Map, options)) {
+            i = delta.first;
+            j = delta.second;
 
-                if (!Map.CellOnGrid(current_node.i + i, current_node.j + j)) continue;
-                if (Map.CellIsObstacle(current_node.i + i, current_node.j + j)) continue;
-                if (is_diagonal) {
-                    if (Map.CellIsObstacle(current_node.i + i, current_node.j) &&
+            if (i * j != 0) { // this means i != 0 and j != 0
+                if (options.allowdiagonal == 0) continue;
+                is_diagonal = true;
+            }
+            else {
+                is_diagonal = false;
+            }
+
+            if (!Map.CellOnGrid(current_node.i + i, current_node.j + j)) continue;
+            if (Map.CellIsObstacle(current_node.i + i, current_node.j + j)) continue;
+            if (is_diagonal) {
+                if (Map.CellIsObstacle(current_node.i + i, current_node.j) &&
                             Map.CellIsObstacle(current_node.i, current_node.j + j) &&
                             !options.allowsqueeze) continue;
-                }
+            }
 
-                new_node = Node(current_node.i + i, current_node.j + j);
+            new_node = Node(current_node.i + i, current_node.j + j);
 
-                std::pair<bool,Node> jump_result = jump(new_node, i, j, Map, goal, options);
+            std::pair<bool,Node> jump_result = jump(new_node, i, j, Map, goal, options);
 
-                if(jump_result.first) {
-                    new_node.i = jump_result.second.i;
-                    new_node.j = jump_result.second.j;
-                    new_node.parent = &(*current_node_iterator);
-                    calculateHeuristic(new_node, Map, options);
+            if(jump_result.first) {
+                new_node.i = jump_result.second.i;
+                new_node.j = jump_result.second.j;
+                new_node.parent = &(*current_node_iterator);
+                calculateHeuristic(new_node, Map, options);
 
-                    open.push(new_node);
-                }
+                open.push(new_node);
 
                 if(new_node == goal) {
                     sresult.pathfound = true;
                     break;
                 }
             }
-            if(sresult.pathfound) break;
         }
         sresult.numberofsteps++;
         if(sresult.pathfound) break;
@@ -224,4 +224,60 @@ void JPSearch::calculateHeuristic(Node &a, const Map &map, const EnvironmentOpti
     else a.H = std::max(di, dj) * options.linecost;
 
     a.F += hweight * a.H;
+}
+
+std::vector<std::pair<int, int> > JPSearch::generateCanonicalOrdering(const Node &current_node, const Map &map, const EnvironmentOptions &options)
+{
+    typedef std::pair<int, int> int_pair;
+
+    std::vector<int_pair> directions;
+
+    // if current_node == start_node
+    if (current_node.parent == nullptr) {
+        directions = {int_pair(-1, 0),
+                      int_pair(1, 0),
+                      int_pair(0, -1),
+                      int_pair(0, 1)};
+
+        if (options.allowdiagonal) {
+            directions.push_back(int_pair(-1, -1));
+            directions.push_back(int_pair(-1, 1));
+            directions.push_back(int_pair(1, -1));
+            directions.push_back(int_pair(1, 1));
+        }
+        return directions;
+    }
+
+    int di, dj;
+
+    if      (current_node.i - current_node.parent->i > 0)  di = 1;
+    else if (current_node.i - current_node.parent->i == 0) di = 0;
+    else                                                   di = -1;
+
+    if      (current_node.j - current_node.parent->j > 0)  dj = 1;
+    else if (current_node.j - current_node.parent->j == 0) dj = 0;
+    else                                                   dj = -1;
+
+    if (di * dj != 0) { // we came from diagonal direction
+        directions.push_back(int_pair(di, 0));
+        directions.push_back(int_pair(0, dj));
+        directions.push_back(int_pair(di, dj));
+
+        if(map.CellIsObstacle(-di, 0)) directions.push_back(int_pair(-di, dj));
+        if(map.CellIsObstacle(0, -dj)) directions.push_back(int_pair(di, -dj));
+    }
+    else { // we came from cardinal direction
+        directions.push_back(int_pair(di, dj)); // just continue first
+
+        if (di == 0) {
+            if (map.CellIsObstacle(current_node.i + 1, current_node.j)) directions.push_back(int_pair(1, dj));
+            if (map.CellIsObstacle(current_node.i - 1, current_node.j)) directions.push_back(int_pair(-1, dj));
+        }
+        else {
+            if (map.CellIsObstacle(current_node.i, current_node.j + 1)) directions.push_back(int_pair(di, 1));
+            if (map.CellIsObstacle(current_node.i, current_node.j - 1)) directions.push_back(int_pair(di, -1));
+        }
+    }
+
+    return directions;
 }
