@@ -5,8 +5,7 @@ struct Node
 {
     int i, j;
     double F, g, H;
-    const Node *parent;
-    //int parent_i, parent_j;
+    const Node *parent = nullptr;
     Node(){}
     Node(int i, int j){this->i=i;this->j=j;}
 
