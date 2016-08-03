@@ -16,7 +16,7 @@ class Astar : public ISearch
         bool F_cmp(Node, Node);
 
     protected:
-        virtual void updateParent(Node &node, const Node &start, const Map &map);
+        virtual void updateParent(Node &node, const Map &map, const EnvironmentOptions &options);
         virtual void calculateHeuristic(Node &a, const Map &map, const EnvironmentOptions &options);
 };
 

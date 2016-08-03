@@ -7,31 +7,19 @@ ThetaStar::ThetaStar(double w, int BT, int SL)
     sizelimit = SL;
 }
 
-void ThetaStar::updateParent(Node &node, const Node &start, const Map &map)
+void ThetaStar::updateParent(Node &node, const Map &map, const EnvironmentOptions &options)
 {
     if (node.parent == nullptr) return;
-    //if (node.parent == start) return;
 
     while (node.parent->parent != nullptr) {
-        if (!lineOfSight(node, *(node.parent->parent), map)){
-            std::cout << node.i << " " << node.j << " -> " << node.parent->i << " " << node.parent->j << std::endl;
-            return;}
+        if (!lineOfSight(node, *(node.parent->parent), map)) break;
         node.parent = node.parent->parent;
     }
 
-    std::cout << node.i << " " << node.j << std::endl;
-}
+    int di = abs(node.i - node.parent->i),
+        dj = abs(node.j - node.parent->j);
 
-void ThetaStar::calculateHeuristic(Node &a, const Map &map, const EnvironmentOptions &options)
-{
-    int di = abs(a.i - a.parent->i);
-    int dj = abs(a.j - a.parent->j);
-    a.g = a.parent->g + sqrt(di * di + dj * dj);
-
-    // applying only octile in theta (TO CHECK!)
-    a.H = std::min(di, dj) * options.diagonalcost + abs(di - dj) * options.linecost;
-
-    a.F = a.g + hweight * a.H;
+    node.g = node.parent->g + sqrt(di * di + dj * dj) * options.linecost;
 }
 
 bool ThetaStar::lineOfSight(const Node &p, const Node &q, const Map &map)

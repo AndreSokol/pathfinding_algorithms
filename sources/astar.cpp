@@ -81,7 +81,7 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
                 else
                     new_node.g = current_node.g + options.linecost;
 
-                updateParent(new_node, start, Map); // placed for ThetaStar search, do nothing here
+                updateParent(new_node, Map, options); // placed for ThetaStar search, do nothing here
                 calculateHeuristic(new_node, Map, options);
 
                 open.push(new_node);
@@ -130,7 +130,7 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
     return sresult;
 }
 
-void Astar::updateParent(Node &node, const Node &start, const Map &map)
+void Astar::updateParent(Node &node, const Map &map, const EnvironmentOptions &options)
 {
 
 }
