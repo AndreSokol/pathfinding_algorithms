@@ -45,5 +45,5 @@ HEADERS += \
     astar.h \
     searchresult.h \
     environmentoptions.h \
-    orderedvector.h \
-    jpsearch.h
+    jpsearch.h \
+    opencontainer.h

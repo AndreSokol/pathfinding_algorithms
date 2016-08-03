@@ -1,6 +1,6 @@
 #include "astar.h"
 #include <set>
-#include "orderedvector.h"
+#include "opencontainer.h"
 #include <chrono>
 #include <cmath>
 
@@ -20,7 +20,7 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
     std::set<Node> closed;
 
     auto cmp = [&](const Node & a, const Node & b) {return a.F < b.F;};
-    OrderedVector<Node, decltype(&cmp)> open(&cmp);
+    OpenContainer<Node, decltype(&cmp)> open(&cmp);
 
     auto start_time = std::chrono::system_clock::now();
 
@@ -64,8 +64,8 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
 
                 if (!Map.CellOnGrid(new_node.i, new_node.j)) continue;
                 if (Map.CellIsObstacle(new_node.i, new_node.j)) continue;
-                if (closed.count(new_node) != 0) continue;
                 if (open.find(new_node)) continue;
+                if (closed.count(new_node) != 0) continue;
                 if (is_diagonal)
                     if (!options.allowsqueeze &&
                             (Map.CellIsObstacle(new_node.i, current_node.j) || Map.CellIsObstacle(current_node.i, new_node.j)))

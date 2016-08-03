@@ -4,7 +4,7 @@
 #include "environmentoptions.h"
 #include <set>
 #include <chrono>
-#include "orderedvector.h"
+#include "opencontainer.h"
 #include <cmath>
 
 JPSearch::JPSearch(double w, int BT, int SL)
@@ -19,7 +19,7 @@ SearchResult JPSearch::startSearch(ILogger *Logger, const Map &Map, const Enviro
     std::set<Node> closed;
 
     auto cmp = [&](const Node & a, const Node & b) {return a.F < b.F;};
-    OrderedVector<Node, decltype(&cmp)> open(&cmp);
+    OpenContainer<Node, decltype(&cmp)> open(&cmp);
 
     auto start_time = std::chrono::system_clock::now();
 
