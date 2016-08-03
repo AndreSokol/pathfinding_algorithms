@@ -9,13 +9,15 @@
 class Astar : public ISearch
 {
     public:
+        Astar();
         Astar(double weight, int BT, int SL);
         ~Astar();
         SearchResult startSearch(ILogger *Logger, const Map &Map, const EnvironmentOptions &options);
         bool F_cmp(Node, Node);
 
     protected:
-        void calculateHeuristic(Node &a, const Map &map, const EnvironmentOptions &options);
+        virtual void updateParent(Node &node, const Node &start, const Map &map);
+        virtual void calculateHeuristic(Node &a, const Map &map, const EnvironmentOptions &options);
 };
 
 #endif

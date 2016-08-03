@@ -28,7 +28,8 @@ SOURCES += \
     astar.cpp \
     asearch.cpp \
     environmentoptions.cpp \
-    jpsearch.cpp
+    jpsearch.cpp \
+    thetastar.cpp
 
 HEADERS += \
     tinyxml.h \
@@ -46,4 +47,5 @@ HEADERS += \
     searchresult.h \
     environmentoptions.h \
     jpsearch.h \
-    opencontainer.h
+    opencontainer.h \
+    thetastar.h
