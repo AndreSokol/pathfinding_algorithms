@@ -1,21 +1,23 @@
-from PIL import Image
+from PIL import Image, ImageDraw
 import os, sys
 
 
 def drawSquare(xOffset, yOffset, color):
-    global im, BLOCK_SIZE
-    for i in range(xOffset * BLOCK_SIZE, (xOffset + 1) * BLOCK_SIZE):
-        for j in range(yOffset * BLOCK_SIZE, (yOffset + 1) * BLOCK_SIZE):
-            im.putpixel((i, j), color)
+    global im_draw, BLOCK_SIZE
+    im_draw.rectangle([xOffset * BLOCK_SIZE, yOffset * BLOCK_SIZE, (xOffset + 1) * BLOCK_SIZE, (yOffset + 1) * BLOCK_SIZE], color)
 
 
 if len(sys.argv) not in (3, 4):
-    print("Usage: " + sys.argv[0] + " <path_to_xml_log_file> <cell_size_in_pixels> [-map_only]")
+    print("Usage: " + sys.argv[0] + " <path_to_xml_log_file> <cell_size_in_pixels> [-map_only|-theta]")
     exit()
 
 MAP_ONLY = False
+THETA = False
 if len(sys.argv) == 4:
-    MAP_ONLY = True
+    if sys.argv[3] == "-map_only":
+        MAP_ONLY = True
+    elif sys.argv[3] == "-theta":
+        THETA = True
 
 BLOCK_SIZE = int(sys.argv[2])
 BLACK_COLOR = (0, 0, 0)
@@ -57,8 +59,8 @@ else:
         mapContainer.append(newline.split())
         newline = testedFile.readline().strip()
 
-
 im = Image.new("RGB", (len(mapContainer) * BLOCK_SIZE, len(mapContainer[0]) * BLOCK_SIZE), "white")
+im_draw = ImageDraw.Draw(im)
 
 for i in range(len(mapContainer)):
     for j in range(len(mapContainer[0])):
@@ -76,17 +78,24 @@ if MAP_ONLY:
 while newline != "<hplevel>":
     newline = testedFile.readline().strip()
 
-hops = []
 newline = testedFile.readline().strip()
 
 # draw start point
 input_list = newline.split('"')
 drawSquare(int(input_list[3]), int(input_list[5]), RED_COLOR)
+hops = [((int(input_list[3]) * BLOCK_SIZE + BLOCK_SIZE // 2,
+          int(input_list[5]) * BLOCK_SIZE + BLOCK_SIZE // 2))]
+
 
 while newline != "</hplevel>":
     input_list = newline.split('"')
     drawSquare(int(input_list[7]), int(input_list[9]), RED_COLOR)
+    hops.append((int(input_list[7]) * BLOCK_SIZE + BLOCK_SIZE // 2,
+                 int(input_list[9]) * BLOCK_SIZE + BLOCK_SIZE // 2))
     newline = testedFile.readline().strip()
+
+if THETA:
+    im_draw.line(hops, YELLOW_COLOR, (BLOCK_SIZE + 9) // 10)
 
 im.save("test_image.bmp")
 
