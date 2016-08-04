@@ -54,11 +54,11 @@ void Mission::createEnvironmentOptions()
 
 void Mission::createSearch()
 {
-    //if (config.SearchParams[CN_SP_ST] == CN_SP_ST_ASTAR)
-    //    search = new Astar(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT], config.SearchParams[CN_SP_SL]);
-    //else if (config.SearchParams[CN_SP_ST] == CN_SP_ST_JP_SEARCH)
-    //    search = new JPSearch(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT], config.SearchParams[CN_SP_SL]);
-    //else if (config.SearchParams[CN_SP_ST] == CN_SP_ST_TH)
+    if (config.SearchParams[CN_SP_ST] == CN_SP_ST_ASTAR)
+        search = new Astar(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT], config.SearchParams[CN_SP_SL]);
+    else if (config.SearchParams[CN_SP_ST] == CN_SP_ST_JP_SEARCH)
+        search = new JPSearch(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT], config.SearchParams[CN_SP_SL]);
+    else if (config.SearchParams[CN_SP_ST] == CN_SP_ST_TH)
         search = new ThetaStar(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT], config.SearchParams[CN_SP_SL]);
 }
 

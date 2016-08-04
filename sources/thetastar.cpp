@@ -22,6 +22,14 @@ void ThetaStar::updateParent(Node &node, const Map &map, const EnvironmentOption
     node.g = node.parent->g + sqrt(di * di + dj * dj) * options.linecost;
 }
 
+double ThetaStar::getHopLength(const Node &a, const EnvironmentOptions &options)
+{
+    int di = abs(a.i - a.parent->i),
+        dj = abs(a.j - a.parent->j);
+
+    return sqrt(di * di + dj * dj) * options.linecost;
+}
+
 bool ThetaStar::lineOfSight(const Node &p, const Node &q, const Map &map)
 {
     int x_1 = p.i,

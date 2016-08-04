@@ -18,6 +18,7 @@ class Astar : public ISearch
     protected:
         virtual void updateParent(Node &node, const Map &map, const EnvironmentOptions &options);
         virtual void calculateHeuristic(Node &a, const Map &map, const EnvironmentOptions &options);
+        virtual double getHopLength(const Node &a, const EnvironmentOptions &options);
 };
 
 #endif

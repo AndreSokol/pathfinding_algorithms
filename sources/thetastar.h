@@ -12,6 +12,7 @@ public:
     bool lineOfSight(const Node &a, const Node &b, const Map &map);
 protected:
     void updateParent(Node &node, const Map &map, const EnvironmentOptions &options);
+    double getHopLength(const Node &a, const EnvironmentOptions &options);
 };
 
 #endif // THETASTAR_H

@@ -4,8 +4,8 @@
 struct Node
 {
     int i, j;
-    double F, g, H;
-    const Node *parent = nullptr;
+    mutable double F, g, H;
+    mutable const Node *parent = nullptr;
     Node(){}
     Node(int i, int j){this->i=i;this->j=j;}
 
@@ -14,6 +14,7 @@ struct Node
             g = a.g;
             F = a.F;
             H = a.H;
+            parent = a.parent;
         }
     }
 

@@ -69,7 +69,7 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
 
                 if (!Map.CellOnGrid(new_node.i, new_node.j)) continue;
                 if (Map.CellIsObstacle(new_node.i, new_node.j)) continue;
-                if (open.find(new_node)) continue;
+                //if (open.find(new_node)) continue;
                 if (closed.count(new_node) != 0) continue;
                 if (is_diagonal)
                     if (!options.allowsqueeze &&
@@ -110,9 +110,10 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
         sresult.hppath = new NodeList();
 
         while (!(current_node == start)) {
+            sresult.pathlength += getHopLength(current_node, options);
+
             sresult.lppath->push_front(current_node);
             sresult.hppath->push_front(current_node);
-            sresult.pathlength++;
 
             current_node = *current_node.parent;
         }
@@ -149,4 +150,11 @@ void Astar::calculateHeuristic(Node & a, const Map &map, const EnvironmentOption
     else a.H = std::max(di, dj) * options.linecost;
 
     a.F += hweight * a.H;
+}
+
+double Astar::getHopLength(const Node &a, const EnvironmentOptions &options)
+{
+    if ((a.i - a.parent->i) * (a.j - a.parent->j) == 0) return options.linecost;
+
+    return options.diagonalcost;
 }

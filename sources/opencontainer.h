@@ -16,13 +16,21 @@ public:
     }
 
     bool find(const T &el) {
-        return (_data.find(el) != _data.end());
+        return (_data.count(el) != 0);
     }
 
     void push(T el) {
-        auto it = _data.find(el);
-
-        if (it == _data.end()) _data.insert(el);
+        if (_data.count(el) == 0) _data.insert(el);
+        else {
+            auto it = _data.find(el);
+            if (it->g > el.g) {
+                //it->update(el);
+                it->g = el.g;
+                it->H = el.H;
+                it->F = el.F;
+                it->parent = el.parent;
+            }
+        }
     }
 
     T pop() {
