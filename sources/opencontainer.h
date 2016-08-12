@@ -37,7 +37,7 @@ private:
 
 public:
     OpenContainer(std::string breaking_ties) {
-        if(breaking_ties == "gmax") _gmax = true;
+        if(breaking_ties == "g-max") _gmax = true;
         else                        _gmax = false;
     }
 
