@@ -24,7 +24,7 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
 {
     std::unordered_set<Node> closed;
 
-    OpenContainer<Node> open("gmax");
+    OpenContainer<Node> open("gmax"); // must be import from map, haven't found it yet
 
     auto start_time = std::chrono::system_clock::now();
 

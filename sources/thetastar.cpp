@@ -78,9 +78,5 @@ bool ThetaStar::lineOfSight(const Node &p, const Node &q, const Map &map)
         else            current_y += growth_y; // crossing, move vertically
     }
 
-    //cellsToCheck.push_back(int_pair(current_x, current_y));
-
-    //for(auto p : cellsToCheck) cout << p.first << " " << p.second << endl;
-
     return true;
 }

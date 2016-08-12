@@ -18,7 +18,6 @@ SearchResult JPSearch::startSearch(ILogger *Logger, const Map &Map, const Enviro
 {
     std::set<Node> closed;
 
-    auto cmp = [&](const Node & a, const Node & b) {return a.F < b.F;};
     OpenContainer<Node> open("gmax"); // must be import from map, haven't found it yet
 
     auto start_time = std::chrono::system_clock::now();
