@@ -22,10 +22,9 @@ Astar::~Astar()
 
 SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const EnvironmentOptions &options)
 {
-    std::set<Node> closed;
+    std::unordered_set<Node> closed;
 
-    auto cmp = [&](const Node & a, const Node & b) {return a.F < b.F;};
-    OpenContainer<Node, decltype(&cmp)> open(&cmp);
+    OpenContainer<Node> open("gmax");
 
     auto start_time = std::chrono::system_clock::now();
 

@@ -1,6 +1,9 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <cstdio>
+#include <functional>
+
 struct Node
 {
     int i, j;
@@ -32,5 +35,13 @@ struct Node
         return a.i > b.i;
     }
 };
+
+namespace std {
+    template<> struct hash<Node> {
+        std::size_t operator()(Node const& k) const {
+            return std::hash<int>()(k.i) ^ (std::hash<int>()(k.j) << 1);
+        }
+    };
+}
 
 #endif

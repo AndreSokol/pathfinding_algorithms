@@ -3,16 +3,42 @@
 
 #include <set>
 
-template <typename T, typename Cmp_type>
+template <typename T>
 class OpenContainer
 {
 private:
-    std::set<T> _data;
-    Cmp_type _cmp;
+    bool _gmax;
+
+    struct _Cmp {
+        bool _i_gmax;
+
+        Cmp(bool new_gmax){
+            _i_gmax = new_gmax;
+        }
+
+        bool operator() (const T &a, const T &b) const {
+            if      (a.F < b.F) return true;
+            else if (a.F > b.F) return false;
+
+            if(_i_gmax) {
+                if      (a.g < b.g) return true;
+                else if (a.g > b.g) return false;
+            }
+
+            if      (a.i < b.i) return true;
+            else if (a.i > b.i) return false;
+
+            if      (a.j < b.j) return true;
+            else if (a.j > b.j) return false;
+        }
+    };
+
+    std::set<T, _Cmp> _data;
 
 public:
-    OpenContainer(Cmp_type cmp) {
-        _cmp = cmp;
+    OpenContainer(std::string breaking_ties) {
+        if(breaking_ties == "gmax") _gmax = true;
+        else                        _gmax = false;
     }
 
     bool find(const T &el) {
@@ -20,11 +46,10 @@ public:
     }
 
     void push(T el) {
-        if (_data.count(el) == 0) _data.insert(el);
+        auto it = _data.find(el);
+        if (it == _data.end()) _data.insert(el);
         else {
-            auto it = _data.find(el);
             if (it->g > el.g) {
-                //it->update(el);
                 it->g = el.g;
                 it->H = el.H;
                 it->F = el.F;
@@ -34,15 +59,7 @@ public:
     }
 
     T pop() {
-        auto it = ++_data.begin();
         auto max_element_it = _data.begin();
-
-        while (it != _data.end()) {
-            if ((*_cmp)(*it, *max_element_it)) {
-                max_element_it = it;
-            }
-            it++;
-        }
 
         T max_element = *max_element_it;
         _data.erase(max_element_it);
