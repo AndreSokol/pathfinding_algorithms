@@ -68,11 +68,10 @@ SearchResult Astar::startSearch(ILogger *Logger, const Map &Map, const Environme
 
                 if (!Map.CellOnGrid(new_node.i, new_node.j)) continue;
                 if (Map.CellIsObstacle(new_node.i, new_node.j)) continue;
-                //if (open.find(new_node)) continue;
                 if (closed.count(new_node) != 0) continue;
                 if (is_diagonal)
                     if (!options.allowsqueeze &&
-                            (Map.CellIsObstacle(new_node.i, current_node.j) || Map.CellIsObstacle(current_node.i, new_node.j)))
+                            (Map.CellIsObstacle(new_node.i, current_node.j) && Map.CellIsObstacle(current_node.i, new_node.j)))
                                     continue;
 
                 if (is_diagonal)

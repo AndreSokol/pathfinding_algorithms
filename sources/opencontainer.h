@@ -23,13 +23,15 @@ private:
             if(_i_gmax) {
                 if      (a.g < b.g) return true;
                 else if (a.g > b.g) return false;
+            } else {
+                if      (a.g > b.g) return true;
+                else if (a.g < b.g) return false;
             }
 
             if      (a.i < b.i) return true;
             else if (a.i > b.i) return false;
 
-            if      (a.j < b.j) return true;
-            else if (a.j > b.j) return false;
+            return a.j < b.j;
         }
     };
 

@@ -525,7 +525,7 @@
         </grid>
     </map>
     <algorithm>
-        <searchtype>astar</searchtype>
+        <searchtype>jp_search</searchtype>
         <metrictype>euclid</metrictype>
         <hweight>1</hweight>
         <breakingties>g-max</breakingties>

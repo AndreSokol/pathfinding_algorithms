@@ -262,8 +262,8 @@ std::vector<std::pair<int, int> > JPSearch::generateCanonicalOrdering(const Node
         directions.push_back(int_pair(0, dj));
         directions.push_back(int_pair(di, dj));
 
-        if(map.CellIsObstacle(-di, 0)) directions.push_back(int_pair(-di, dj));
-        if(map.CellIsObstacle(0, -dj)) directions.push_back(int_pair(di, -dj));
+        if(map.CellIsObstacle(current_node.i - di, current_node.j)) directions.push_back(int_pair(-di, dj));
+        if(map.CellIsObstacle(current_node.i, current_node.j - dj)) directions.push_back(int_pair(di, -dj));
     }
     else { // we came from cardinal direction
         directions.push_back(int_pair(di, dj)); // just continue first
